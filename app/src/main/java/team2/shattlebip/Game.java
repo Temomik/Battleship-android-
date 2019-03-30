@@ -10,7 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.widget.GridView;
 import android.widget.TextView;
 
-
+//tixon
 import java.util.Random;
 
 public class Game {
