@@ -9,6 +9,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import team2.shattlebip.AdapterBoard;
+import team2.shattlebip.Cell;
+import team2.shattlebip.Game;
+import team2.shattlebip.R;
+
 public class MainActivity extends AppCompatActivity {
     private int numCellsBoardSide;
     private TextView textViewGameStage, textViewMessage;

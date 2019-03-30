@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import team2.shattlebip.R;
+
 public class MainMenu extends AppCompatActivity implements View.OnClickListener {
    private Button startGameButton;
    private Button showCreditsButton;
