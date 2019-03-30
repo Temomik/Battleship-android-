@@ -3,8 +3,11 @@ commiiitisaiti
 
 second try es
 
+<<<<<<< HEAD
 lolas
 sa
 d
 sa
 
+alesha
+>>>>>>> 712dedd858c53ea52de7e512f54ee530d89a7aca
