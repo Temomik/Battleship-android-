@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="num_cells_board_side">10</integer>
+    <integer name="one_deck_ship_size">1</integer>
+    <integer name="two_deck_ship_size">2</integer>
+    <integer name="three_deck_ship_size">3</integer>
+    <integer name="four_deck_ship_size">4</integer>
+
 </resources>

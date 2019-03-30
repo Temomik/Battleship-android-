@@ -1,6 +1,5 @@
-package team2.shattlebip;
+package team2.shattlebip.Pages;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
@@ -9,8 +8,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import team2.shattlebip.AdapterBoard;
-import team2.shattlebip.Cell;
+import team2.shattlebip.View.AdapterBoard;
+import team2.shattlebip.Resources.Cell;
 import team2.shattlebip.Game;
 import team2.shattlebip.R;
 

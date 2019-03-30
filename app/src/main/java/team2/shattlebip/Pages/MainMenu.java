@@ -1,4 +1,4 @@
-package team2.shattlebip;
+package team2.shattlebip.Pages;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,11 +27,11 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener 
     }
 
     private void startGameButtonClick() {
-        startActivity(new Intent("team2.shattlebip.ConnectMenu"));
+        startActivity(new Intent("team2.shattlebip.Pages.ConnectMenu"));
     }
 
     private void showCreditsButtonClick() {
-        startActivity(new Intent("team2.shattlebip.Credits"));
+        startActivity(new Intent("team2.shattlebip.Pages.Credits"));
     }
 
     private void exitButtonClick() {

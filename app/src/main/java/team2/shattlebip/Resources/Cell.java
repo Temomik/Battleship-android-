@@ -1,4 +1,4 @@
-package team2.shattlebip;
+package team2.shattlebip.Resources;
 
 //for each cell on gameboard
 

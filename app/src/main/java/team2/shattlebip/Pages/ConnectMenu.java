@@ -1,4 +1,4 @@
-package team2.shattlebip;
+package team2.shattlebip.Pages;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +24,7 @@ public class ConnectMenu extends AppCompatActivity implements View.OnClickListen
     }
 
     private void createGameButtonClick() {
-        startActivity(new Intent("team2.shattlebip.MainActivity"));
+        startActivity(new Intent("team2.shattlebip.Pages.MainActivity"));
     }
 
     private void connectGameButtonClick() {

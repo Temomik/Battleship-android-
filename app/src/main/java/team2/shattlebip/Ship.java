@@ -3,6 +3,8 @@ package team2.shattlebip;
 import java.util.ArrayList;
 import java.util.List;
 
+import team2.shattlebip.Resources.Cell;
+
 public class Ship {
     private int numCellsAdded = 0;
     private int playerNum;

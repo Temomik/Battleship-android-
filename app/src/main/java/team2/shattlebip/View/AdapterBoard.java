@@ -1,4 +1,4 @@
-package team2.shattlebip;
+package team2.shattlebip.View;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
@@ -11,6 +11,9 @@ import android.widget.GridView;
 
 import java.util.List;
 
+import team2.shattlebip.R;
+import team2.shattlebip.Resources.Cell;
+import team2.shattlebip.Ships.BaseShip;
 
 
 public class AdapterBoard extends ArrayAdapter<Cell> {
@@ -30,9 +33,15 @@ public class AdapterBoard extends ArrayAdapter<Cell> {
         context = newContext;
     }
 
-    public void update(int playerNum, Cell cell, Cell.Status status,int size) {
-        if(collisionCheck(cell, status,size))
-            for(int i = 0; i < size; i++)
+    /**
+     * now takes BaseShip as a parameter
+     * @param ship ship we want to place in array
+     */
+    public void update(int playerNum, Cell cell, Cell.Status status, BaseShip ship) {
+        if(ship ==null)
+            return;
+        if(collisionCheck(cell, status,ship.getShipSize()))
+            for(int i = 0; i < ship.getShipSize(); i++)
                 this.getItem(this.getPosition(cell) + i).setStatus(status);
     }
 

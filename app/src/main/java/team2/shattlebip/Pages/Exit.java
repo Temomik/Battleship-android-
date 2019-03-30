@@ -1,4 +1,4 @@
-package team2.shattlebip;
+package team2.shattlebip.Pages;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

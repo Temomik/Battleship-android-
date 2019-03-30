@@ -1,8 +1,6 @@
 package team2.shattlebip;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -10,8 +8,16 @@ import android.support.v4.content.ContextCompat;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import team2.shattlebip.Resources.Cell;
+import team2.shattlebip.Ships.BaseShip;
+import team2.shattlebip.Ships.FourDeckShip;
+import team2.shattlebip.Ships.OneDeckShip;
+import team2.shattlebip.Ships.ThreeDeckShip;
+import team2.shattlebip.Ships.TwoDeckShip;
+import team2.shattlebip.View.AdapterBoard;
+
 //tixon
-import java.util.Random;
+
 
 public class Game {
     private static Game instance;
@@ -24,9 +30,9 @@ public class Game {
     private GridView gridViewBoard1;
     private AdapterBoard adapterBoard1;
     private Player player1;
-    private int ShipSize;
+    private BaseShip shipToArrange;
     private Button buttonRotate;
-    private Button buttonDelte;
+    private Button buttonDelete;
     private boolean isDeleteButtonPressed;
 
     private Game() {
@@ -58,8 +64,7 @@ public class Game {
         this.gridViewBoard1 = gridViewBoard1;
         this.adapterBoard1 = adapterBoard1;
         this.buttonRotate = buttonRotate;
-        this.buttonDelte = buttonDelete;
-        this.ShipSize = 0;
+        this.buttonDelete = buttonDelete;
         this.isDeleteButtonPressed = false;
     }
 
@@ -70,50 +75,52 @@ public class Game {
         buttonRestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteButtoReleased();
+                deleteButtonReleased();
                 initialize();
             }
         });
         SwitchShipSize[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deleteButtoReleased();
-                setShipSize(1);
+                deleteButtonReleased();
+               // setShipSize(1);
                 unmarkCurrentShip();
                 SwitchShipSize[0].setBackground(ContextCompat.getDrawable(getContext(),R.drawable.noun_ship_s));
+                shipToArrange =new OneDeckShip();
 
             }
         });
         SwitchShipSize[1].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deleteButtoReleased();
-                setShipSize(2);
+                deleteButtonReleased();
+                //setShipSize(2);
                 unmarkCurrentShip();
                 SwitchShipSize[1].setBackground(ContextCompat.getDrawable(getContext(),R.drawable.noun_battleship_s));
+                shipToArrange =new TwoDeckShip();
             }
         });
         SwitchShipSize[2].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deleteButtoReleased();
-                setShipSize(3);
+                deleteButtonReleased();
+               // setShipSize(3);
                 unmarkCurrentShip();
                 SwitchShipSize[2].setBackground(ContextCompat.getDrawable(getContext(),R.drawable.noun_military_ship_s));
-
+                shipToArrange =new ThreeDeckShip();
             }
         });
         SwitchShipSize[3].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deleteButtoReleased();
-                setShipSize(4);
+                deleteButtonReleased();
+               // setShipSize(4);
                 unmarkCurrentShip();
                 SwitchShipSize[3].setBackground(ContextCompat.getDrawable(getContext(),R.drawable.noun_warship_s));
-
+                shipToArrange =new FourDeckShip();
             }
         });
-        buttonDelte.setOnClickListener(new View.OnClickListener() {
+        buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 deleteButtonPressed();
@@ -123,12 +130,8 @@ public class Game {
         disableClicking();
         adapterBoard1.clear();
         adapterBoard1.createBattleField(gridViewBoard1, 1, getNumCellsBoardArea());
-        player1 = new Player(1);
+        //player1 = new Player(1);
         enableGameStageArranging();
-    }
-
-    public void setShipSize(int size) {
-        this.ShipSize = size;
     }
 
     private void enableGameStageArranging() {
@@ -140,13 +143,16 @@ public class Game {
         return context;
     }
 
+    /**
+     * method to arrange ships
+     */
     private void letP1arrange() {
         gridViewBoard1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cell cell = (Cell) parent.getAdapter().getItem(position);
                 if(!isDeleteButtonPressed) {
-                    adapterBoard1.update(1,cell, Cell.Status.MISSED,ShipSize);
+                    adapterBoard1.update(1,cell, Cell.Status.MISSED, shipToArrange);
                 } else {
                     adapterBoard1.delete(cell, Cell.Status.MISSED);
                 }
@@ -185,7 +191,7 @@ public class Game {
         this.isDeleteButtonPressed = true;
     }
 
-    public void deleteButtoReleased() {
+    public void deleteButtonReleased() {
         this.isDeleteButtonPressed = false;
     }
 
