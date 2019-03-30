@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Battleship</string>
+    <string name="button_play">Play vs Bot</string>
+    <string name="button_credits">credits</string>
+    <string name="button_start_game">Start game</string>
+    <string name="button_exit_game">Exit</string>
+    <string name="button_connect_game">Connect</string>
+    <string name="button_create_game">Create</string>
+    <string name="button_back_game">Back</string>
+    <string name="arrange_ships_label">Your ships to place: </string>
+    <string name="cell_status_vacant">vacant</string>
+    <string name="cell_status_occupied">occupied</string>
+    <string name="cell_status_hit">hit</string>
+    <string name="cell_status_missed">missed</string>
+</resources>

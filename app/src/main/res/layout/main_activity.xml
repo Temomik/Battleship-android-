@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="team2.shattlebip.MainActivity">
+    <!--Main panel-->
+    <LinearLayout
+        android:id="@+id/layout_grid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="0dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Board" />
+
+        <GridView
+            android:id="@+id/gridViewBoard1"
+            style="@style/StyleGridViewBoard"
+            android:layout_width="310dp"
+            android:layout_height="310dp"></GridView>
+    </LinearLayout>
+
+    <!--Layout for ship's images and their count-->
+    <RelativeLayout
+        android:id="@+id/layoutее_top"
+        android:layout_below="@id/layout_grid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/placeHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="arrange_ships_label" />
+
+        <Button
+            android:id="@+id/four-deck_ship"
+            android:layout_below="@id/placeHeader"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:clickable="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/noun_warship" />
+
+        <Button
+            android:id="@+id/three-deck_ship"
+            android:layout_width="80dp"
+            android:layout_below="@id/four-deck_ship"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/noun_military_ship" />
+
+        <Button
+            android:id="@+id/two-deck_ship"
+            android:layout_width="80dp"
+            android:clickable="true"
+            android:layout_below="@id/three-deck_ship"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/noun_battleship" />
+
+        <Button
+            android:id="@+id/one-deck_ship"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/two-deck_ship"
+            android:clickable="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/noun_ship" />
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/placeHeader"
+            android:layout_toRightOf="@id/four-deck_ship"
+            android:layout_gravity="right"
+            android:text="1"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/four-deck_ship"
+            android:layout_toRightOf="@id/three-deck_ship"
+            android:layout_marginTop="20dp"
+            android:text="2"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/three-deck_ship"
+            android:layout_toRightOf="@id/two-deck_ship"
+            android:layout_marginTop="20dp"
+            android:text="3"
+            android:gravity="center" />
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/two-deck_ship"
+            android:layout_toRightOf="@id/one-deck_ship"
+            android:layout_marginTop="20dp"
+            android:text="4"
+            android:gravity="center"/>
+    </RelativeLayout>
+
+    <!--Panel of actions while ship arranging -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="35px">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ACTION" />
+
+            <Button
+                android:id="@+id/button_upgrade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Random" />
+
+            <Button
+                android:id="@+id/button_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete" />
+
+            <Button
+                android:id="@+id/button_rotate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="rotate" />
+            <Button
+                android:id="@+id/button_initialize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RESET" />
+            <Button
+                android:id="@+id/button_continue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CONTINUE" />
+
+        </LinearLayout>
+
+</RelativeLayout>
