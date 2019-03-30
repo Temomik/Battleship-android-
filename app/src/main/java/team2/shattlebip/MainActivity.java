@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     private GridView gridViewBoard1;
     private AdapterBoard adapterBoard1;
 
+    //temomik
+
     /**
      * passes variables to class Game and initializes game
      */
