@@ -63,6 +63,17 @@ public class ArrangeHandler {
         if(ship instanceof FourDeckShip)
             countShipsLeftToArrange[3]--;
     }
+    private void increaseShipCount(BaseShip ship)
+    {
+        if(ship instanceof OneDeckShip)
+            countShipsLeftToArrange[0]++;
+        if(ship instanceof TwoDeckShip)
+            countShipsLeftToArrange[1]++;
+        if(ship instanceof ThreeDeckShip)
+            countShipsLeftToArrange[2]++;
+        if(ship instanceof FourDeckShip)
+            countShipsLeftToArrange[3]++;
+    }
 
     private boolean canHorizontallyArrange(int x,int y, BaseShip ship)
     {
@@ -117,4 +128,15 @@ public class ArrangeHandler {
     }
 
     public ArrayDeque<BaseShip> getShips(){return arrangedShips;}
+
+    public BaseShip deleteShipByCell(Cell cell) {
+        for (BaseShip ship:arrangedShips) {
+            if(ship.getShipLoaction().contains(cell)) {
+               increaseShipCount(ship);
+               arrangedShips.remove(ship);
+                return ship;
+            }
+        }
+        return null;
+    }
 }

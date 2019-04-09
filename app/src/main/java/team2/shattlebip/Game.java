@@ -169,13 +169,14 @@ public class Game {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cell cell = (Cell) parent.getAdapter().getItem(position);
-                if(!isDeleteButtonPressed) {
+                if(arrangeHandler.isShipSelected) {
                     if(arrangeHandler.canPlaceShip(cell)) {
                         adapterBoard1.update(cell,arrangeHandler);
+                        unmarkCurrentShip();
                     }
                 }
-                else {
-                    adapterBoard1.delete(cell, Cell.Status.MISSED);
+                if(isDeleteButtonPressed){
+                    adapterBoard1.delete(cell,arrangeHandler);
                 }
                 adapterBoard1.notifyDataSetChanged();
             }

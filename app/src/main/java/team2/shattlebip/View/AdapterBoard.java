@@ -54,11 +54,12 @@ public class AdapterBoard extends ArrayAdapter<Cell> {
         }
     }
 
-    public void delete(Cell cell,Cell.Status status) {
-        int cellPosition = this.getPosition(cell);
-        if(this.getItem(cellPosition).getStatus() == status)
-        while( this.getItem(this.getPosition(cell)).getStatus()== status) {
-            this.getItem(this.getPosition(cell)).setStatus(Cell.Status.VACANT);
+    public void delete(Cell cell, ArrangeHandler handler) {
+        BaseShip ship=handler.deleteShipByCell(cell);
+        if(ship!=null) {
+            for (Cell cel:ship.getShipLoaction()) {
+                this.getItem(this.getPosition(cel)).setStatus(Cell.Status.VACANT);
+            }
         }
     }
 
