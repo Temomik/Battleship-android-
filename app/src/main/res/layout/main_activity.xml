@@ -8,22 +8,6 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="team2.shattlebip.Pages.MainActivity">
-    <data>
-
-        <variable
-            android:name="FourDeckShip"
-            android:type="team2.shattlebip.Ships.FourDeckShip" />
-        <variable
-            android:name="ThreeDeckShip"
-            android:type="team2.shattlebip.Ships.ThreeDeckShip" />
-        <variable
-            android:name="TwoDeckShip"
-            android:type="team2.shattlebip.Ships.TwoDeckShip" />
-        <variable
-            android:name="OneDeckShip"
-            android:type="team2.shattlebip.Ships.OneDeckShip" />
-
-    </data>
     <!--Main panel-->
     <LinearLayout
         android:id="@+id/layout_grid"
@@ -129,7 +113,7 @@
             android:layout_below="@id/two-deck_ship"
             android:layout_toRightOf="@id/one-deck_ship"
             android:layout_marginTop="20dp"
-            android:text="4"
+            android:text="@{ship.count}"
             android:gravity="center"/>
     </RelativeLayout>
 

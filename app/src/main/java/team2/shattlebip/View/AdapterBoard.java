@@ -11,6 +11,7 @@ import android.widget.GridView;
 
 import java.util.List;
 
+import team2.shattlebip.ArrangeHandler;
 import team2.shattlebip.R;
 import team2.shattlebip.Resources.Cell;
 import team2.shattlebip.Ships.BaseShip;
@@ -35,14 +36,22 @@ public class AdapterBoard extends ArrayAdapter<Cell> {
 
     /**
      * now takes BaseShip as a parameter
-     * @param ship ship we want to place in array
+     * @param handler class that controls arranging rules
      */
-    public void update(int playerNum, Cell cell, Cell.Status status, BaseShip ship) {
-        if(ship ==null)
-            return;
-        if(collisionCheck(cell, status,ship.getShipSize()))
-            for(int i = 0; i < ship.getShipSize(); i++)
-                this.getItem(this.getPosition(cell) + i).setStatus(status);
+    public void update(Cell cell, ArrangeHandler handler) {
+        BaseShip ship=handler.getShips().getLast();
+        if(ship.getRotation()== BaseShip.Rotation.HORIZONTAL) {
+            for (int i = 0; i < ship.getShipSize(); i++) {
+                this.getItem(this.getPosition(cell) + i).setStatus(Cell.Status.MISSED);
+                ship.addCell(this.getItem(this.getPosition(cell) + i));
+            }
+        }
+            else{
+            for (int i = 0; i < ship.getShipSize(); i++) {
+                this.getItem(this.getPosition(cell) + i*(10)).setStatus(Cell.Status.MISSED);
+                ship.addCell(this.getItem(this.getPosition(cell)+i*(10)));
+            }
+        }
     }
 
     public void delete(Cell cell,Cell.Status status) {
@@ -51,21 +60,6 @@ public class AdapterBoard extends ArrayAdapter<Cell> {
         while( this.getItem(this.getPosition(cell)).getStatus()== status) {
             this.getItem(this.getPosition(cell)).setStatus(Cell.Status.VACANT);
         }
-    }
-
-    public boolean collisionCheck(Cell cell, Cell.Status criticalStatus, int size){
-//        int isNewRow = 0;
-        size+=2;
-        for(int i = 0; i < size; i++) {
-//            isNewRow = this.getPosition(cell) + i;
-//            isNewRow /= 10;
-            if(this.getItem(this.getPosition(cell) + i -1).getStatus() == criticalStatus ||
-                this.getItem(this.getPosition(cell) + i -1 + 10).getStatus() == criticalStatus ||
-                this.getItem(this.getPosition(cell) + i -1 - 10).getStatus() == criticalStatus ) {
-                return  false;
-            }
-        }
-        return true;
     }
 
     /**
@@ -95,7 +89,8 @@ public class AdapterBoard extends ArrayAdapter<Cell> {
      */
     public void createBattleField(GridView gridView, int playerNum, int numCells) {
             gridView.setAdapter(this);
-            for (int i = 0; i < numCells; i++)
-            this.add(new Cell(playerNum, Cell.Status.VACANT));
+            for (int y = 0; y < numCells; y++)
+                for(int x=0;x<numCells;x++)
+            this.add(new Cell(x,y));
     }
 }

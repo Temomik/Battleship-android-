@@ -5,11 +5,16 @@ package team2.shattlebip.Resources;
 public class Cell {
     private int playerNum;
     private Status status;
-
-    public Cell(int playerNum, Status status) {
-        this.playerNum = playerNum;
-        this.status = status;
+    private int X;
+    private int Y;
+    public Cell(int x, int y) {
+        X=x;
+        Y=y;
+        status=Status.VACANT;
     }
+    public int getX(){return  X;}
+
+    public int getY() {return Y;}
 
     public int getPlayerNum() {
         return playerNum;
@@ -23,7 +28,7 @@ public class Cell {
         this.status = status;
     }
 
-    public enum Status {
+    public  enum Status {
         VACANT, OCCUPIED, HIT , MISSED
     }
 }

@@ -12,6 +12,7 @@ public class Ship {
     private int numCells;
     private List<Cell> cells;
 
+
     /**
      * creates ship according to ship type
      */
@@ -34,7 +35,6 @@ public class Ship {
             numCells = 4;
         }
     }
-
     /**
      * how many cells left to arrange this ship
      */

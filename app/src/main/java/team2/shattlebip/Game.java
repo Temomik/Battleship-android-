@@ -8,6 +8,10 @@ import android.support.v4.content.ContextCompat;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
+
 import team2.shattlebip.Resources.Cell;
 import team2.shattlebip.Ships.BaseShip;
 import team2.shattlebip.Ships.FourDeckShip;
@@ -30,10 +34,10 @@ public class Game {
     private GridView gridViewBoard1;
     private AdapterBoard adapterBoard1;
     private Player player1;
-    private BaseShip shipToArrange;
     private Button buttonRotate;
     private Button buttonDelete;
     private boolean isDeleteButtonPressed;
+    private ArrangeHandler arrangeHandler;
 
     private Game() {
     }
@@ -65,18 +69,25 @@ public class Game {
         this.adapterBoard1 = adapterBoard1;
         this.buttonRotate = buttonRotate;
         this.buttonDelete = buttonDelete;
-        this.isDeleteButtonPressed = false;
     }
 
     /**
      * [re]starts game by clearing boards and letting bot secretly arrange its fleet
      */
     public void initialize() {
+        arrangeHandler=new ArrangeHandler();
         buttonRestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 deleteButtonReleased();
                 initialize();
+            }
+        });
+        buttonRotate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(arrangeHandler.getShips()!=null&&arrangeHandler.getShips().getLast()!=null)
+                    arrangeHandler.getShips().getLast().rotate();
             }
         });
         SwitchShipSize[0].setOnClickListener(new View.OnClickListener() {
@@ -86,8 +97,9 @@ public class Game {
                // setShipSize(1);
                 unmarkCurrentShip();
                 SwitchShipSize[0].setBackground(ContextCompat.getDrawable(getContext(),R.drawable.noun_ship_s));
-                shipToArrange =new OneDeckShip();
-
+                if(arrangeHandler.isShipSelected)
+                    arrangeHandler.deleteLastShip();
+                arrangeHandler.addShip(new OneDeckShip());
             }
         });
         SwitchShipSize[1].setOnClickListener(new View.OnClickListener() {
@@ -97,7 +109,9 @@ public class Game {
                 //setShipSize(2);
                 unmarkCurrentShip();
                 SwitchShipSize[1].setBackground(ContextCompat.getDrawable(getContext(),R.drawable.noun_battleship_s));
-                shipToArrange =new TwoDeckShip();
+                if(arrangeHandler.isShipSelected)
+                    arrangeHandler.deleteLastShip();
+                arrangeHandler.addShip(new TwoDeckShip());
             }
         });
         SwitchShipSize[2].setOnClickListener(new View.OnClickListener() {
@@ -107,17 +121,21 @@ public class Game {
                // setShipSize(3);
                 unmarkCurrentShip();
                 SwitchShipSize[2].setBackground(ContextCompat.getDrawable(getContext(),R.drawable.noun_military_ship_s));
-                shipToArrange =new ThreeDeckShip();
+                if(arrangeHandler.isShipSelected)
+                    arrangeHandler.deleteLastShip();
+                arrangeHandler.addShip(new ThreeDeckShip());
+
             }
         });
         SwitchShipSize[3].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 deleteButtonReleased();
-               // setShipSize(4);
                 unmarkCurrentShip();
                 SwitchShipSize[3].setBackground(ContextCompat.getDrawable(getContext(),R.drawable.noun_warship_s));
-                shipToArrange =new FourDeckShip();
+                if(arrangeHandler.isShipSelected)
+                    arrangeHandler.deleteLastShip();
+                arrangeHandler.addShip(new FourDeckShip());
             }
         });
         buttonDelete.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +147,7 @@ public class Game {
 
         disableClicking();
         adapterBoard1.clear();
-        adapterBoard1.createBattleField(gridViewBoard1, 1, getNumCellsBoardArea());
+        adapterBoard1.createBattleField(gridViewBoard1, 1, numCells1side);
         //player1 = new Player(1);
         enableGameStageArranging();
     }
@@ -152,11 +170,13 @@ public class Game {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cell cell = (Cell) parent.getAdapter().getItem(position);
                 if(!isDeleteButtonPressed) {
-                    adapterBoard1.update(1,cell, Cell.Status.MISSED, shipToArrange);
-                } else {
+                    if(arrangeHandler.canPlaceShip(cell)) {
+                        adapterBoard1.update(cell,arrangeHandler);
+                    }
+                }
+                else {
                     adapterBoard1.delete(cell, Cell.Status.MISSED);
                 }
-//                player1.addCell(cell);
                 adapterBoard1.notifyDataSetChanged();
             }
         });

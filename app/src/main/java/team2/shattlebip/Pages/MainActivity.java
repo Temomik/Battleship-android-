@@ -1,5 +1,4 @@
 package team2.shattlebip.Pages;
-
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
@@ -19,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private Button  buttonRestart;
     private Button[] SwitchShipSize;
     private Button buttonRotate;
-    private Button buttonDelte;
+    private Button buttonDelete;
     private GridView gridViewBoard1;
     private AdapterBoard adapterBoard1;
 
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private void enableGame() {
         Game game = Game.getInstance();
         game.setFields(this, numCellsBoardSide, textViewGameStage, textViewMessage, buttonRestart,
-                gridViewBoard1, adapterBoard1,SwitchShipSize, buttonDelte,buttonRotate);
+                gridViewBoard1, adapterBoard1,SwitchShipSize, buttonDelete,buttonRotate);
         game.initialize();
     }
 
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         numCellsBoardSide = getResources().getInteger(R.integer.num_cells_board_side);
         buttonRestart = (Button) findViewById(R.id.button_initialize);
         buttonRotate = (Button) findViewById(R.id.button_rotate);
-        buttonDelte = (Button) findViewById(R.id.button_delete);
+        buttonDelete = (Button) findViewById(R.id.button_delete);
         SwitchShipSize[0] = (Button) findViewById(R.id.one_deck_ship);
         SwitchShipSize[1] = (Button) findViewById(R.id.two_deck_ship);
         SwitchShipSize[2] = (Button) findViewById(R.id.three_deck_ship);

@@ -10,13 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fdf13c61-e333-4cc5-a452-158389a671d9" name="Default Changelist" comment="">
-<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/app/src/main/java/team2/shattlebip/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/team2/shattlebip/MainActivity.java" afterDir="false" />
-=======
       <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/team2/shattlebip/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/team2/shattlebip/Game.java" afterDir="false" />
->>>>>>> bd7551cb2b1605a354746dd696bab2cf93a5530e
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
