@@ -36,20 +36,17 @@ public class AdapterBoard extends ArrayAdapter<Cell> {
 
     /**
      * now takes BaseShip as a parameter
-     * @param handler class that controls arranging rules
+     * @param ship that's need to be arranged
      */
-    public void update(Cell cell, ArrangeHandler handler) {
-        BaseShip ship=handler.getShips().getLast();
+    public void update(Cell cell, BaseShip ship) {
         if(ship.getRotation()== BaseShip.Rotation.HORIZONTAL) {
             for (int i = 0; i < ship.getShipSize(); i++) {
                 this.getItem(this.getPosition(cell) + i).setStatus(Cell.Status.MISSED);
-                ship.addCell(this.getItem(this.getPosition(cell) + i));
             }
         }
-            else{
+        else{
             for (int i = 0; i < ship.getShipSize(); i++) {
                 this.getItem(this.getPosition(cell) + i*(10)).setStatus(Cell.Status.MISSED);
-                ship.addCell(this.getItem(this.getPosition(cell)+i*(10)));
             }
         }
     }

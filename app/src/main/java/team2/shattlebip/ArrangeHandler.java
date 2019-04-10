@@ -1,6 +1,7 @@
 package team2.shattlebip;
 
 import java.util.ArrayDeque;
+import java.util.Random;
 
 import team2.shattlebip.Resources.Cell;
 import team2.shattlebip.Ships.BaseShip;
@@ -8,6 +9,7 @@ import team2.shattlebip.Ships.FourDeckShip;
 import team2.shattlebip.Ships.OneDeckShip;
 import team2.shattlebip.Ships.ThreeDeckShip;
 import team2.shattlebip.Ships.TwoDeckShip;
+import team2.shattlebip.View.AdapterBoard;
 
 public class ArrangeHandler {
     private ArrayDeque<BaseShip> arrangedShips;
@@ -33,13 +35,21 @@ public class ArrangeHandler {
     {
         arrangedShips.removeLast();
     }
-    public boolean canPlaceShip(Cell cell)
+    public boolean tryToPlaceShip(Cell cell, AdapterBoard board)
     {
         if(arrangedShips.getLast()==null||getSpecificShipCount(arrangedShips.getLast())==0)
             return false;
         if(isCollision(cell,arrangedShips.getLast()))
             return false;
+        if(arrangedShips.getLast().getRotation()== BaseShip.Rotation.HORIZONTAL) {
+            for (int i = 0; i < arrangedShips.getLast().getShipSize(); i++)
+                arrangedShips.getLast().addCell(board.getItem(board.getPosition(cell) + i));
+        }
+        else
+            for (int i = 0; i < arrangedShips.getLast().getShipSize(); i++)
+                arrangedShips.getLast().addCell(board.getItem(board.getPosition(cell) + (i*10)));
         changeShipCount(arrangedShips.getLast());
+        board.update(cell,this.getShips().getLast());
         isShipSelected=false;
         return true;
     }
@@ -138,5 +148,52 @@ public class ArrangeHandler {
             }
         }
         return null;
+    }
+
+    private BaseShip getShipByLength(int i)
+    {
+        BaseShip ship;
+        switch (i) {
+            case 0:
+                ship=new OneDeckShip();
+                break;
+            case 1:
+                ship=new TwoDeckShip();
+                break;
+            case 2:
+                ship= new ThreeDeckShip();
+                break;
+            case 3:
+                ship =new FourDeckShip();
+                break;
+            default:
+                ship=null;
+                break;
+        }
+        return ship;
+    }
+
+    public void arrangeShipsRandomly(AdapterBoard board) {
+        for(int ii=3;ii>=0;ii--){
+            while(countShipsLeftToArrange[ii]>0)
+            {
+                Random rand=new Random();
+                int i,j,o;
+                BaseShip.Rotation rotation;
+                BaseShip ship;
+                do {
+                    if(isShipSelected)
+                        arrangedShips.removeLast();
+                   i=rand.nextInt(10);
+                   j=rand.nextInt(10);
+                   o = rand.nextInt(2);
+                    arrangedShips.addLast(getShipByLength(ii));
+                    isShipSelected=true;
+                    if (o != 0)
+                        arrangedShips.getLast().rotate();
+                }while(!tryToPlaceShip(board.getItem(i+10*j),board));
+
+            }
+        }
     }
 }

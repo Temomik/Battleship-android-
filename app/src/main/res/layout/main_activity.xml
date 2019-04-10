@@ -132,7 +132,7 @@
                 android:text="ACTION" />
 
             <Button
-                android:id="@+id/button_upgrade"
+                android:id="@+id/button_random"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Random" />

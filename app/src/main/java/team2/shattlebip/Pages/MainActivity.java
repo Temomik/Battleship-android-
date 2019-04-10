@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private Button[] SwitchShipSize;
     private Button buttonRotate;
     private Button buttonDelete;
+    private Button buttonRandom;
     private GridView gridViewBoard1;
     private AdapterBoard adapterBoard1;
 
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private void enableGame() {
         Game game = Game.getInstance();
         game.setFields(this, numCellsBoardSide, textViewGameStage, textViewMessage, buttonRestart,
-                gridViewBoard1, adapterBoard1,SwitchShipSize, buttonDelete,buttonRotate);
+                gridViewBoard1, adapterBoard1,SwitchShipSize, buttonDelete,buttonRotate,buttonRandom);
         game.initialize();
     }
 
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         buttonRestart = (Button) findViewById(R.id.button_initialize);
         buttonRotate = (Button) findViewById(R.id.button_rotate);
         buttonDelete = (Button) findViewById(R.id.button_delete);
+        buttonRandom=(Button) findViewById(R.id.button_random);
         SwitchShipSize[0] = (Button) findViewById(R.id.one_deck_ship);
         SwitchShipSize[1] = (Button) findViewById(R.id.two_deck_ship);
         SwitchShipSize[2] = (Button) findViewById(R.id.three_deck_ship);

@@ -8,10 +8,6 @@ import android.support.v4.content.ContextCompat;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-
 import team2.shattlebip.Resources.Cell;
 import team2.shattlebip.Ships.BaseShip;
 import team2.shattlebip.Ships.FourDeckShip;
@@ -36,6 +32,7 @@ public class Game {
     private Player player1;
     private Button buttonRotate;
     private Button buttonDelete;
+    private Button buttonRandom;
     private boolean isDeleteButtonPressed;
     private ArrangeHandler arrangeHandler;
 
@@ -58,7 +55,7 @@ public class Game {
                           AdapterBoard adapterBoard1,
                           Button[] SwitchShipSize,
                           Button buttonDelete,
-                          Button buttonRotate) {
+                          Button buttonRotate,Button buttonRandom) {
         this.context = context;
         this.numCells1side = numCells1side;
         this.textViewGameStage = textViewGameStage;
@@ -69,6 +66,7 @@ public class Game {
         this.adapterBoard1 = adapterBoard1;
         this.buttonRotate = buttonRotate;
         this.buttonDelete = buttonDelete;
+        this.buttonRandom=buttonRandom;
     }
 
     /**
@@ -88,6 +86,13 @@ public class Game {
             public void onClick(View v) {
                 if(arrangeHandler.getShips()!=null&&arrangeHandler.getShips().getLast()!=null)
                     arrangeHandler.getShips().getLast().rotate();
+            }
+        });
+        buttonRandom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initialize();
+                arrangeHandler.arrangeShipsRandomly(adapterBoard1);
             }
         });
         SwitchShipSize[0].setOnClickListener(new View.OnClickListener() {
@@ -118,7 +123,6 @@ public class Game {
             @Override
             public void onClick(View view) {
                 deleteButtonReleased();
-               // setShipSize(3);
                 unmarkCurrentShip();
                 SwitchShipSize[2].setBackground(ContextCompat.getDrawable(getContext(),R.drawable.noun_military_ship_s));
                 if(arrangeHandler.isShipSelected)
@@ -170,14 +174,11 @@ public class Game {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cell cell = (Cell) parent.getAdapter().getItem(position);
                 if(arrangeHandler.isShipSelected) {
-                    if(arrangeHandler.canPlaceShip(cell)) {
-                        adapterBoard1.update(cell,arrangeHandler);
-                        unmarkCurrentShip();
-                    }
+                    arrangeHandler.tryToPlaceShip(cell, adapterBoard1);
+                    unmarkCurrentShip();
                 }
-                if(isDeleteButtonPressed){
+                if(isDeleteButtonPressed)
                     adapterBoard1.delete(cell,arrangeHandler);
-                }
                 adapterBoard1.notifyDataSetChanged();
             }
         });
