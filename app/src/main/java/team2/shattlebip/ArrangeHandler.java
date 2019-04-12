@@ -53,6 +53,15 @@ public class ArrangeHandler {
         else
             ship.setRotation(BaseShip.Rotation.HORIZONTAL);
         arrangedShips.addLast(ship);
+
+        if(ship instanceof OneDeckShip)
+            ship = new OneDeckShip();
+        if(ship instanceof TwoDeckShip)
+            ship = new ThreeDeckShip();
+        if(ship instanceof ThreeDeckShip)
+            ship = new ThreeDeckShip();
+        if(ship instanceof FourDeckShip)
+            ship = new FourDeckShip();
         isShipSelected=true;
     }
     public void deleteLastShip()

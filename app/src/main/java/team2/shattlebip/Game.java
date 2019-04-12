@@ -242,15 +242,6 @@ public class Game {
                  arrangeHandler.addShip(currentShip);
 
                  arrangeHandler.tryToPlaceShip(cell, adapterBoard1);
-
-                    if(currentShip instanceof OneDeckShip)
-                        currentShip = new OneDeckShip();
-                    if(currentShip instanceof TwoDeckShip)
-                        currentShip = new ThreeDeckShip();
-                    if(currentShip instanceof ThreeDeckShip)
-                        currentShip = new ThreeDeckShip();
-                    if(currentShip instanceof FourDeckShip)
-                        currentShip = new FourDeckShip();
 //                    unmarkCurrentShip();
                 }
                 if(isDeleteButtonPressed) {
