@@ -1,7 +1,6 @@
 package team2.shattlebip;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -9,9 +8,14 @@ import android.support.v4.content.ContextCompat;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import team2.shattlebip.Pages.GameProcess;
-import team2.shattlebip.Pages.MainActivity;
-import team2.shattlebip.Resources.Cell;
+import java.io.IOException;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
+import team2.shattlebip.Models.Cell;
+import team2.shattlebip.Models.Player;
 import team2.shattlebip.Ships.BaseShip;
 import team2.shattlebip.Ships.FourDeckShip;
 import team2.shattlebip.Ships.OneDeckShip;
@@ -26,31 +30,32 @@ import team2.shattlebip.databinding.MainActivityBinding;
 
 public class Game {
     private static Game instance;
-    private Stage stage;
     private Context context;
-    private int numCells1side;
-    private TextView[] shipCount;
-    private int count = 0;
     private TextView rotateImage;
     private TextView deleteImage;
     private boolean isShipButtonPressed;
+    private boolean isDeleteButtonPressed;
+    private int numCells1side;
 
     private Button buttonRestart;
     private Button[] SwitchShipSize;
-    private GridView gridViewBoard1;
-    private AdapterBoard adapterBoard1;
-    private Player player1;
     private Button buttonRotate;
     private Button buttonDelete;
     private Button buttonRandom;
-    private Button buttonContinue;
-    private boolean isDeleteButtonPressed;
-    private ArrangeHandler arrangeHandler;
+
+    private GridView myViewBoard;
+    private AdapterBoard myBoard;
+    private AdapterBoard enemyBoard;
     private MainActivityBinding binding;
     private BaseShip currentShip;
-    private GameProcess gameProcess;
+    private Player me;
+    private Player enemy;
+
     private Game() {
     }
+
+    public Player getEnemy(){return enemy;}
+    public Player getMe(){return me;}
 
     public static Game getInstance() {
         if (instance == null)
@@ -61,28 +66,26 @@ public class Game {
      * passes variables from MainActivity
      */
     public void setFields(Context context, int numCells1side,
-                          TextView [] shipCount,
                           Button buttonRestart,
                           GridView gridViewBoard1,
-                          AdapterBoard adapterBoard1,
+                          AdapterBoard myBoard,
                           Button[] SwitchShipSize,
                           Button buttonDelete,
                           Button buttonRotate,
                           Button buttonRandom,
-                          Button buttonContinue,
                           TextView rotateImage,
                           TextView deleteImage,
-                          MainActivityBinding binding) {
+                          MainActivityBinding binding,
+                          AdapterBoard enemyBoard) {
         this.context = context;
         this.rotateImage = rotateImage;
         this.numCells1side = numCells1side;
-        this.shipCount = shipCount;
         this.buttonRestart = buttonRestart;
-        this.buttonContinue=buttonContinue;
         this.deleteImage = deleteImage;
         this.SwitchShipSize = SwitchShipSize;
-        this.gridViewBoard1 = gridViewBoard1;
-        this.adapterBoard1 = adapterBoard1;
+        this.myViewBoard = gridViewBoard1;
+        this.myBoard = myBoard;
+        this.enemyBoard=enemyBoard;
         this.buttonRotate = buttonRotate;
         this.buttonDelete = buttonDelete;
         this.buttonRandom=buttonRandom;
@@ -94,40 +97,27 @@ public class Game {
      * [re]starts game by clearing boards and letting bot secretly arrange its fleet
      */
     public void initialize() {
-        arrangeHandler=new ArrangeHandler();
-        binding.setArrangeHandler(arrangeHandler);
-        arrangeHandler.binding = this.binding;
-
+        myBoard.clear();
+        myBoard.createBattleField(numCells1side);
+        me=new Player(myBoard);
+        binding.setArrangeHandler(me.getArrangeHandler());
+        me.getArrangeHandler().binding = this.binding;
         buttonRestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 deleteButtonReleased();
                 initialize();
                 isShipButtonPressed = false;
-                arrangeHandler.rotateVertical = 0;
-                arrangeHandler.updateRotateImage(rotateImage);
+                me.getArrangeHandler().rotateVertical=0;
+                me.getArrangeHandler().updateRotateImage(rotateImage);
                 unmarkCurrentShip();
             }
         });
         buttonRotate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                arrangeHandler.rotateVertical = arrangeHandler.rotateVertical^1;
-//                    rotateImage.setText(Integer.toString(arrangeHandler.rotateVertical));
-                arrangeHandler.updateRotateImage(rotateImage);
-//                if(arrangeHandler.getShips()!=null && arrangeHandler.getShipCount() != 0 && arrangeHandler.getShips().getLast()!=null) {
-//                    arrangeHandler.getShips().getLast().rotate();
-//                }
-            }
-        });
-        buttonContinue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                isShipButtonPressed = false;
-                if(arrangeHandler.getShipCount() == 10) {
-                    gameProcess=new GameProcess(gridViewBoard1,adapterBoard1);
-                    context.startActivity(new Intent("team2.shattlebip.Pages.GameProcess"));
-                }
+                me.getArrangeHandler().rotateVertical^=1;
+                me.getArrangeHandler().updateRotateImage(rotateImage);
             }
         });
         buttonRandom.setOnClickListener(new View.OnClickListener() {
@@ -135,7 +125,7 @@ public class Game {
             public void onClick(View v) {
                 initialize();
                 isShipButtonPressed = false;
-                arrangeHandler.arrangeShipsRandomly(adapterBoard1);
+                me.getArrangeHandler().arrangeShipsRandomly(myBoard);
             }
         });
         SwitchShipSize[0].setOnClickListener(new View.OnClickListener() {
@@ -143,13 +133,8 @@ public class Game {
             public void onClick(View view) {
                 unmarkCurrentShip();
                 deleteButtonReleased();
-                // setShipSize(1);
                 SwitchShipSize[0].setBackground(ContextCompat.getDrawable(getContext(),R.drawable.noun_ship_s));
-//                if(arrangeHandler.isShipSelected) {
-//                    arrangeHandler.deleteLastShip();
-//                }
                 isShipButtonPressed = true;
-//                arrangeHandler.addShip(new OneDeckShip());
                 currentShip = new OneDeckShip();
             }
         });
@@ -158,13 +143,8 @@ public class Game {
             public void onClick(View view) {
                 unmarkCurrentShip();
                 deleteButtonReleased();
-                //setShipSize(2);
                 SwitchShipSize[1].setBackground(ContextCompat.getDrawable(getContext(),R.drawable.noun_battleship_s));
-//                if(arrangeHandler.isShipSelected) {
-//                    arrangeHandler.deleteLastShip();
-//                }
                 isShipButtonPressed = true;
-//                arrangeHandler.addShip(new TwoDeckShip());
                 currentShip = new TwoDeckShip();
             }
         });
@@ -174,12 +154,7 @@ public class Game {
                 unmarkCurrentShip();
                 deleteButtonReleased();
                 SwitchShipSize[2].setBackground(ContextCompat.getDrawable(getContext(),R.drawable.noun_military_ship_s));
-//                if(arrangeHandler.isShipSelected) {
-//                    arrangeHandler.deleteLastShip();
-//                }
-
                 isShipButtonPressed = true;
-//                arrangeHandler.addShip(new ThreeDeckShip());
                 currentShip = new ThreeDeckShip();
 
             }
@@ -190,11 +165,7 @@ public class Game {
                 unmarkCurrentShip();
                 deleteButtonReleased();
                 SwitchShipSize[3].setBackground(ContextCompat.getDrawable(getContext(),R.drawable.noun_warship_s));
-//                if(arrangeHandler.isShipSelected) {
-//                    arrangeHandler.deleteLastShip();
-//                }
                 isShipButtonPressed = true;
-//                arrangeHandler.addShip(new FourDeckShip());
                 currentShip = new FourDeckShip();
             }
         });
@@ -212,16 +183,15 @@ public class Game {
                 }
             }
         });
-
         disableClicking();
-        adapterBoard1.clear();
-        adapterBoard1.createBattleField(gridViewBoard1, 1, numCells1side);
-        //player1 = new Player(1);
+        enemyBoard.clear();
+        enemyBoard.createBattleField(numCells1side);
+        enemy=new Player(enemyBoard);
+        myViewBoard.setAdapter(myBoard);
         enableGameStageArranging();
     }
 
     private void enableGameStageArranging() {
-       // putGameStage(Stage.ARRANGING);
         letP1arrange();
     }
 
@@ -233,25 +203,42 @@ public class Game {
      * method to arrange ships
      */
     private void letP1arrange() {
-        gridViewBoard1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        myViewBoard.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cell cell = (Cell) parent.getAdapter().getItem(position);
-                arrangeHandler.isShipSelected = isShipButtonPressed;
-                if(arrangeHandler.isShipSelected) {
-                 arrangeHandler.addShip(currentShip);
-
-                 arrangeHandler.tryToPlaceShip(cell, adapterBoard1);
-//                    unmarkCurrentShip();
+                me.getArrangeHandler().isShipSelected=isShipButtonPressed;
+                if(me.getArrangeHandler().isShipSelected) {
+                    placeShipOnBoard(cell);
                 }
                 if(isDeleteButtonPressed) {
-                    adapterBoard1.delete(cell,arrangeHandler);
+                    myBoard.delete(cell,me.getArrangeHandler());
                 }
-                adapterBoard1.notifyDataSetChanged();
+                myBoard.notifyDataSetChanged();
             }
         });
+        enemy.arrangeShips();
     }
 
+    private void placeShipOnBoard(Cell cell)
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try(ObjectOutputStream ous=new ObjectOutputStream(baos)) {
+            ous.writeObject(currentShip);
+        }
+        catch (IOException e)
+        {}
+        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        try(ObjectInputStream ois = new ObjectInputStream(bais)) {
+            BaseShip cloneShip = (BaseShip) ois.readObject();
+            if(me.getArrangeHandler().tryToPlaceShip(cell, me.getBoard(),cloneShip))
+                me.getArrangeHandler().addShip(cloneShip);
+        }
+        catch (ClassNotFoundException e)
+        {}
+        catch (IOException e)
+        {}
+    }
     public void unmarkCurrentShip() {
         SwitchShipSize[0].setBackground(ContextCompat.getDrawable(getContext(),R.drawable.noun_ship));
         SwitchShipSize[1].setBackground(ContextCompat.getDrawable(getContext(),R.drawable.noun_battleship));
@@ -261,22 +248,8 @@ public class Game {
         isDeleteButtonPressed = false;
     }
 
-//    private void putGameStage(Stage stage) {
-//        this.stage = stage;
-//        String msg = "Game stage: " + stage;
-//        textViewGameStage.setText(msg);
-//    }
-
-//    private void setMessage(String msg) {
-//        textViewMessage.setText("Message: " + msg);
-//    }
-
     private void disableClicking() {
-        gridViewBoard1.setOnItemClickListener(null);
-    }
-
-    private int getNumCellsBoardArea() {
-        return (int) Math.pow(numCells1side, 2);
+        myViewBoard.setOnItemClickListener(null);
     }
 
     public void deleteButtonPressed() {
@@ -285,12 +258,5 @@ public class Game {
 
     public void deleteButtonReleased() {
         this.isDeleteButtonPressed = false;
-    }
-
-
-
-
-    private enum Stage {
-        ARRANGING, BATTLING, ATTACKING
     }
 }

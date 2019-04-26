@@ -2,8 +2,9 @@ package team2.shattlebip.Resources;
 
 //for each cell on gameboard
 
-public class Cell {
-    private int playerNum;
+import java.io.Serializable;
+
+public class Cell implements Serializable {
     private Status status;
     private int X;
     private int Y;
@@ -16,10 +17,6 @@ public class Cell {
 
     public int getY() {return Y;}
 
-    public int getPlayerNum() {
-        return playerNum;
-    }
-
     public Status getStatus() {
         return status;
     }
@@ -29,6 +26,6 @@ public class Cell {
     }
 
     public  enum Status {
-        VACANT, OCCUPIED, HIT , MISSED, HORIZONTAL_FRONT,HORIZONTAL_BACK,HORIZONTAL_BODY,HORIZONTAL_SINGLE,VERTICAL_FRONT,VERTICAL_BODY,VERTICAL_BACK,VERTICAL_SINGLE
+        VACANT, HIT , MISSED, HORIZONTAL_FRONT,HORIZONTAL_BACK,HORIZONTAL_BODY,HORIZONTAL_SINGLE,VERTICAL_FRONT,VERTICAL_BODY,VERTICAL_BACK,VERTICAL_SINGLE
     }
 }

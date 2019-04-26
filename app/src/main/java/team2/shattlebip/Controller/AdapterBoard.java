@@ -7,20 +7,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.GridView;
 
+import java.io.Serializable;
 import java.util.List;
 
 import team2.shattlebip.ArrangeHandler;
 import team2.shattlebip.R;
-import team2.shattlebip.Resources.Cell;
+import team2.shattlebip.Models.Cell;
 import team2.shattlebip.Ships.BaseShip;
 
 
-public class AdapterBoard extends ArrayAdapter<Cell> {
+public class AdapterBoard extends ArrayAdapter<Cell> implements Serializable {
     private LayoutInflater inflater;
     private List<Cell> objects;
-    private Context context;
 
     public List<Cell> getObjects() {
         return objects;
@@ -31,8 +30,12 @@ public class AdapterBoard extends ArrayAdapter<Cell> {
         super(newContext, -1, newObjects);
         inflater = LayoutInflater.from(newContext);
         objects = newObjects;
-        context = newContext;
     }
+    /*public void setInflater(Context context, GridView viewBoard)
+    {
+        inflater=LayoutInflater.from(context);
+        inflater.inflate(R.layout.layout_cell, viewBoard, false);
+    }*/
 
     /**
      * now takes BaseShip as a parameter
@@ -90,9 +93,7 @@ public class AdapterBoard extends ArrayAdapter<Cell> {
         if (cell.getStatus() == Cell.Status.HIT)
             button.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
         else if (cell.getStatus() == Cell.Status.MISSED)
-            button.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
-        else if (cell.getPlayerNum() == 2)
-            button.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+            button.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.splash));
         else if (cell.getStatus() == Cell.Status.VACANT) {
             //button.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorVacant));
         }
@@ -120,16 +121,13 @@ public class AdapterBoard extends ArrayAdapter<Cell> {
         else if (cell.getStatus() == Cell.Status.VERTICAL_SINGLE) {
             button.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.vertical_single));
         }
-        else
-            button.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.splash));
         return view;
     }
 
     /**
      * creates board with empty cells
      */
-    public void createBattleField(GridView gridView, int playerNum, int numCells) {
-            gridView.setAdapter(this);
+    public void createBattleField(int numCells) {
             for (int y = 0; y < numCells; y++)
                 for(int x=0;x<numCells;x++)
             this.add(new Cell(x,y));
