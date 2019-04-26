@@ -1,28 +1,21 @@
 package team2.shattlebip;
-import android.databinding.BaseObservable;
-import android.databinding.Bindable;
-import android.databinding.ObservableArrayList;
-import android.databinding.ObservableInt;
 import android.widget.TextView;
 
 import java.util.ArrayDeque;
 import java.util.Random;
-import android.support.v7.app.AppCompatActivity;
 
-import team2.shattlebip.Pages.MainActivity;
-import team2.shattlebip.Resources.Cell;
+import team2.shattlebip.Models.Cell;
 import team2.shattlebip.Ships.BaseShip;
 import team2.shattlebip.Ships.FourDeckShip;
 import team2.shattlebip.Ships.OneDeckShip;
 import team2.shattlebip.Ships.ThreeDeckShip;
 import team2.shattlebip.Ships.TwoDeckShip;
-import team2.shattlebip.View.AdapterBoard;
+import team2.shattlebip.Controller.AdapterBoard;
 import team2.shattlebip.databinding.MainActivityBinding;
 
 public class ArrangeHandler {
     private ArrayDeque<BaseShip> arrangedShips;
-    public int[] countShipsLeftToArrange;
-//    public ObservableArrayList<Integer> countShipsLeftToArrange;
+    private int[] countShipsLeftToArrange;
     public int rotateVertical;
     public boolean isShipSelected;
     public MainActivityBinding binding;
@@ -53,37 +46,27 @@ public class ArrangeHandler {
         else
             ship.setRotation(BaseShip.Rotation.HORIZONTAL);
         arrangedShips.addLast(ship);
-
-        if(ship instanceof OneDeckShip)
-            ship = new OneDeckShip();
-        if(ship instanceof TwoDeckShip)
-            ship = new ThreeDeckShip();
-        if(ship instanceof ThreeDeckShip)
-            ship = new ThreeDeckShip();
-        if(ship instanceof FourDeckShip)
-            ship = new FourDeckShip();
         isShipSelected=true;
     }
-    public void deleteLastShip()
+    public boolean tryToPlaceShip(Cell cell, AdapterBoard board, BaseShip ship)
     {
-        arrangedShips.removeLast();
-    }
-    public boolean tryToPlaceShip(Cell cell, AdapterBoard board)
-    {
-//        textViewMessage.setText("21");
-        if(arrangedShips.getLast()==null||getSpecificShipCount(arrangedShips.getLast())==0)
+        if(ship==null||getSpecificShipCount(ship)==0)
             return false;
-        if(isCollision(cell,arrangedShips.getLast()))
+        if(rotateVertical == 1)
+            ship.setRotation(BaseShip.Rotation.VERTICAL);
+        else
+            ship.setRotation(BaseShip.Rotation.HORIZONTAL);
+        if(isCollision(cell,ship))
             return false;
-        if(arrangedShips.getLast().getRotation()== BaseShip.Rotation.HORIZONTAL) {
-            for (int i = 0; i < arrangedShips.getLast().getShipSize(); i++)
-                arrangedShips.getLast().addCell(board.getItem(board.getPosition(cell) + i));
+        if(ship.getRotation()== BaseShip.Rotation.HORIZONTAL) {
+            for (int i = 0; i < ship.getShipSize(); i++)
+                ship.addCell(board.getItem(board.getPosition(cell) + i));
         }
         else
-            for (int i = 0; i < arrangedShips.getLast().getShipSize(); i++)
-                arrangedShips.getLast().addCell(board.getItem(board.getPosition(cell) + (i*10)));
-        changeShipCount(arrangedShips.getLast());
-        board.update(cell,this.getShips().getLast());
+            for (int i = 0; i < ship.getShipSize(); i++)
+                ship.addCell(board.getItem(board.getPosition(cell) + (i*10)));
+        decreaseShipCount(ship);
+        board.update(cell,ship);
         isShipSelected=false;
         return true;
     }
@@ -96,7 +79,7 @@ public class ArrangeHandler {
                 !canVerticallyArrange(x,y,ship);
     }
 
-    private void changeShipCount(BaseShip ship)
+    private void decreaseShipCount(BaseShip ship)
     {
         if(ship instanceof OneDeckShip)
             countShipsLeftToArrange[0]--;
@@ -106,6 +89,7 @@ public class ArrangeHandler {
             countShipsLeftToArrange[2]--;
         if(ship instanceof FourDeckShip)
             countShipsLeftToArrange[3]--;
+        if(binding!=null)
         binding.invalidateAll();
     }
     private void increaseShipCount(BaseShip ship)
@@ -118,6 +102,7 @@ public class ArrangeHandler {
             countShipsLeftToArrange[2]++;
         if(ship instanceof FourDeckShip)
             countShipsLeftToArrange[3]++;
+        if(binding!=null)
         binding.invalidateAll();
     }
 
@@ -174,6 +159,7 @@ public class ArrangeHandler {
     }
 
     public ArrayDeque<BaseShip> getShips(){return arrangedShips;}
+
     public int getShipCount() {return arrangedShips.size();}
 
     public BaseShip deleteShipByCell(Cell cell) {
@@ -236,7 +222,7 @@ public class ArrangeHandler {
                     isShipSelected=true;
                     if (o != 0)
                         arrangedShips.getLast().rotate();
-                }while(!tryToPlaceShip(board.getItem(i+10*j),board));
+                }while(!tryToPlaceShip(board.getItem(i+10*j),board,arrangedShips.getLast()));
             }
         }
     }

@@ -1,16 +1,11 @@
-package team2.shattlebip;
+package team2.shattlebip.Models;
 
-import android.widget.GridView;
-
-import java.lang.reflect.Array;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Deque;
-import java.util.List;
 
-import team2.shattlebip.Resources.Cell;
+import team2.shattlebip.ArrangeHandler;
 import team2.shattlebip.Ships.BaseShip;
-import team2.shattlebip.View.AdapterBoard;
+import team2.shattlebip.Controller.AdapterBoard;
 
 public class Player {
     private ArrayDeque<BaseShip> ships = new ArrayDeque<>();

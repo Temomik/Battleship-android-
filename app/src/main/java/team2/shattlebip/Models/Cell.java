@@ -1,4 +1,4 @@
-package team2.shattlebip.Resources;
+package team2.shattlebip.Models;
 
 //for each cell on gameboard
 

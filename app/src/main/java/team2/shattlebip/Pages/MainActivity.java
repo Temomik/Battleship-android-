@@ -1,20 +1,22 @@
 package team2.shattlebip.Pages;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import team2.shattlebip.View.AdapterBoard;
-import team2.shattlebip.Resources.Cell;
-import team2.shattlebip.Game;
+import team2.shattlebip.Controller.AdapterBoard;
+import team2.shattlebip.GameData;
+import team2.shattlebip.Models.Cell;
 import team2.shattlebip.R;
 import team2.shattlebip.databinding.MainActivityBinding;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private int numCellsBoardSide;
     private TextView[] shipCount = new TextView[4];
     private TextView rotateImage;
@@ -24,34 +26,34 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonRotate;
     private Button buttonDelete;
     private Button buttonRandom;
-    Button buttonContinue;
-    private GridView gridViewBoard1;
-    private AdapterBoard adapterBoard1;
+    private Button buttonContinue;
+    private GridView myViewBoard;
+    private AdapterBoard myBoard;
+    private AdapterBoard enemyBoard;
     private MainActivityBinding binding;
 
 
     //temomik
     /**
-     * passes variables to class Game and initializes game
+     * passes variables to class GameData and initializes game
      */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-
         binding = DataBindingUtil.setContentView(this, R.layout.main_activity);
-//        MainActivityBinding binding = DataBindingUtil.setContentView(this, R.layout.main_activity);
         setFields();
         enableGame();
 
     }
 
     private void enableGame() {
-        Game game = Game.getInstance();
-        game.setFields(this, numCellsBoardSide, shipCount, buttonRestart,
-                gridViewBoard1, adapterBoard1,SwitchShipSize, buttonDelete,buttonRotate,buttonRandom,buttonContinue,rotateImage, deleteImage,binding);
-        game.initialize();
+        GameData gameData = GameData.getInstance();
+        gameData.setFields(this, numCellsBoardSide, buttonRestart,
+                myViewBoard, myBoard,SwitchShipSize, buttonDelete,buttonRotate,
+                buttonRandom,rotateImage, deleteImage,binding,enemyBoard);
+        gameData.initialize();
     }
 
     private void setFields() {
@@ -68,11 +70,25 @@ public class MainActivity extends AppCompatActivity {
         buttonDelete = (Button) findViewById(R.id.button_delete);
         buttonRandom=(Button) findViewById(R.id.button_random);
         buttonContinue=(Button) findViewById(R.id.button_continue);
+        buttonContinue.setOnClickListener(this);
         SwitchShipSize[0] = (Button) findViewById(R.id.one);
         SwitchShipSize[1] = (Button) findViewById(R.id.two_deck_ship);
         SwitchShipSize[2] = (Button) findViewById(R.id.three_deck_ship);
         SwitchShipSize[3] = (Button) findViewById(R.id.four_deck_ship);
-        gridViewBoard1 = (GridView) findViewById(R.id.gridViewBoard1);
-        adapterBoard1 = new AdapterBoard(this, new ArrayList<Cell>());
+        myViewBoard = (GridView) findViewById(R.id.gridViewBoard1);
+        myBoard = new AdapterBoard(this, new ArrayList<Cell>());
+        enemyBoard=new AdapterBoard(this,new ArrayList<Cell>());
+    }
+    private void startGameButtonClick() {
+        if(GameData.getInstance().getMe().getArrangeHandler().getShipCount()==10) {
+            GameData.getInstance().getMe().finishArranging();
+            startActivity(new Intent("team2.shattlebip.Pages.GameProcess"));
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId()==R.id.button_continue)
+            startGameButtonClick();
     }
 }

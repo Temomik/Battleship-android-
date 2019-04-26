@@ -21,15 +21,15 @@ import team2.shattlebip.Ships.FourDeckShip;
 import team2.shattlebip.Ships.OneDeckShip;
 import team2.shattlebip.Ships.ThreeDeckShip;
 import team2.shattlebip.Ships.TwoDeckShip;
-import team2.shattlebip.View.AdapterBoard;
+import team2.shattlebip.Controller.AdapterBoard;
 import team2.shattlebip.databinding.MainActivityBinding;
 
 
 //tixon
 
 
-public class Game {
-    private static Game instance;
+public class GameData {
+    private static GameData instance;
     private Context context;
     private TextView rotateImage;
     private TextView deleteImage;
@@ -51,15 +51,15 @@ public class Game {
     private Player me;
     private Player enemy;
 
-    private Game() {
+    private GameData() {
     }
 
     public Player getEnemy(){return enemy;}
     public Player getMe(){return me;}
 
-    public static Game getInstance() {
+    public static GameData getInstance() {
         if (instance == null)
-            instance = new Game();
+            instance = new GameData();
         return instance;
     }
     /**

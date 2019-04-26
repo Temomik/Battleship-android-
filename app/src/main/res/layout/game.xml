@@ -23,19 +23,20 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Your Board" />
+            android:text="Enemie's board" />
 
         <GridView
             android:id="@+id/gridViewBoard1"
             style="@style/StyleGridViewBoard"
-            android:layout_width="wrap_content"
-            android:layout_height="400dp"></GridView>
+            android:layout_width="320dp"
+            android:layout_height="320dp"
+            android:layout_marginBottom="20dp"></GridView>
 
-    <GridView
-        android:id="@+id/gridViewBoard2"
-        style="@style/StyleGridViewBoard"
-        android:layout_width="310dp"
-        android:layout_height="310dp"></GridView>
+        <GridView
+            android:id="@+id/gridViewBoard2"
+            style="@style/StyleGridViewBoard"
+            android:layout_width="320dp"
+            android:layout_height="320dp"></GridView>
     </LinearLayout>
 
     <!--Layout for ship's images and their count-->

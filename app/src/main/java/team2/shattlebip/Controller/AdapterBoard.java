@@ -1,4 +1,4 @@
-package team2.shattlebip.View;
+package team2.shattlebip.Controller;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;

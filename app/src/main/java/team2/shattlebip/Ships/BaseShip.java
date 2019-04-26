@@ -1,26 +1,18 @@
 package team2.shattlebip.Ships;
 
-import android.widget.TextView;
-
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
-import team2.shattlebip.R;
-import team2.shattlebip.Resources.Cell;
+import team2.shattlebip.Models.Cell;
 
-public abstract class BaseShip {
+public abstract class BaseShip implements Serializable {
     private int shipSize;
     private Rotation rotation;
-    public int getShipSize(){return shipSize;}
     private ArrayList<Cell> cells;
+
+    public int getShipSize(){return shipSize;}
     public ArrayList<Cell> getShipLoaction(){return cells;}
-    public void takeDamage(Cell cell)
-    {
-        for (Cell cel:cells) {
-            if(cel==cell)
-                cells.remove(cel);
-        }
-    }
+
     public BaseShip(int size) {
         shipSize=size;
         rotation=Rotation.HORIZONTAL;
@@ -36,6 +28,7 @@ public abstract class BaseShip {
     {
         cells.add(cel);
     }
+
     public void rotate(){
         if(rotation==Rotation.HORIZONTAL) {
             rotation=Rotation.VERTICAL;
@@ -44,5 +37,15 @@ public abstract class BaseShip {
             rotation=Rotation.HORIZONTAL;
         }
     }
+    public boolean isAlive()
+    {
+        boolean alive=false;
+        for (Cell cell:cells) {
+            if(cell.getStatus() != Cell.Status.HIT)
+                alive=true;
+        }
+        return alive;
+    }
     public enum Rotation {HORIZONTAL, VERTICAL}
+
 }
