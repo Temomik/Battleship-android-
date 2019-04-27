@@ -13,19 +13,50 @@ public class BattleStageHandler {
 
     public void blockAreaNearBy(AdapterBoard board, BaseShip ship)
     {
-        int size=ship.getShipSize()+1;
+        int size=ship.getShipSize();
         Cell cell=ship.getShipLoaction().get(0);
-        int X=cell.getX();
-        int Y=cell.getY();
-        board.getItem((X+10*Y)-1).setStatus(Cell.Status.MISSED);
-        board.getItem((X+10*Y)+ship.getShipSize()).setStatus(Cell.Status.MISSED);
-            for (Cell cel : ship.getShipLoaction()) {
-                int x=cel.getX();
-                int y=cel.getY();
-                for(int i=0;i<size;++i) {
-                    board.getItem((x+10*y)-1+i+10).setStatus(Cell.Status.MISSED);
-                    board.getItem((x+10*y)-1+i-10).setStatus(Cell.Status.MISSED);
+        int matrixIndex = cell.getX()+10*cell.getY() - 1;
+        for (int i = 0; i <= size + 1; i++) {
+            int tmpMatrixIndex = matrixIndex - 10;
+            if((cell.getX() != 0 && i == 0) || (cell.getX() + i <= 10 && i != 0) ) {
+                for (int j = 0; j < 3; j++) {
+                    if (tmpMatrixIndex < 100 && tmpMatrixIndex >= 0 && board.getItem(tmpMatrixIndex).getStatus() == Cell.Status.VACANT) {
+                        board.getItem(tmpMatrixIndex).setStatus(Cell.Status.MISSED);
+                        board.getItem(tmpMatrixIndex).setSprite(Cell.Sprite.MISSED);
+                    }
+                    tmpMatrixIndex += 10;
                 }
             }
+            matrixIndex++;
+        }
+    }
+    public void hitShip(Cell cell) {
+        cell.setStatus(Cell.Status.HIT);
+        switch (cell.getSprite()) {
+            case HORIZONTAL_FRONT:
+                cell.setSprite(Cell.Sprite.HORIZONTAL_FRONT_HIT);
+                break;
+            case HORIZONTAL_BACK:
+                cell.setSprite(Cell.Sprite.HORIZONTAL_BACK_HIT);
+                break;
+            case HORIZONTAL_BODY:
+                cell.setSprite(Cell.Sprite.HORIZONTAL_BODY_HIT);
+                break;
+            case HORIZONTAL_SINGLE:
+                cell.setSprite(Cell.Sprite.HORIZONTAL_SINGLE_HIT);
+                break;
+            case VERTICAL_FRONT:
+                cell.setSprite(Cell.Sprite.HORIZONTAL_FRONT_HIT);
+                break;
+            case VERTICAL_BODY:
+                cell.setSprite(Cell.Sprite.VERTICAL_BODY_HIT);
+                break;
+            case VERTICAL_BACK:
+                cell.setSprite(Cell.Sprite.VERTICAL_BACK_HIT);
+                break;
+            case VERTICAL_SINGLE:
+                cell.setSprite(Cell.Sprite.VERTICAL_SINGLE_HIT);
+                break;
+        }
     }
 }

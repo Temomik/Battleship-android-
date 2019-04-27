@@ -220,8 +220,11 @@ public class ArrangeHandler {
                    o = rand.nextInt(2);
                     arrangedShips.addLast(getShipByLength(ii));
                     isShipSelected=true;
-                    if (o != 0)
+                    if (o != 0) {
                         arrangedShips.getLast().rotate();
+                        rotateVertical = o;
+                    }
+
                 }while(!tryToPlaceShip(board.getItem(i+10*j),board,arrangedShips.getLast()));
             }
         }

@@ -29,8 +29,7 @@
             android:id="@+id/gridViewBoard1"
             style="@style/StyleGridViewBoard"
             android:layout_width="320dp"
-            android:layout_height="320dp"
-            android:layout_marginBottom="20dp"></GridView>
+            android:layout_height="320dp"   ></GridView>
 
         <GridView
             android:id="@+id/gridViewBoard2"

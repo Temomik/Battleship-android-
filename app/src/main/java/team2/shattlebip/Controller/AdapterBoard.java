@@ -45,29 +45,29 @@ public class AdapterBoard extends ArrayAdapter<Cell> implements Serializable {
         if(ship.getRotation()== BaseShip.Rotation.HORIZONTAL) {
             for (int i = 0; i < ship.getShipSize(); i++) {
                 if( ship.getShipSize() == 1)
-                    this.getItem(this.getPosition(cell) + i).setStatus(Cell.Status.HORIZONTAL_SINGLE);
+                    this.getItem(this.getPosition(cell) + i).setSprite(Cell.Sprite.HORIZONTAL_SINGLE);
                 else
                 if(i == 0)
-                    this.getItem(this.getPosition(cell) + i).setStatus(Cell.Status.HORIZONTAL_FRONT);
+                    this.getItem(this.getPosition(cell) + i).setSprite(Cell.Sprite.HORIZONTAL_FRONT);
                 else
                 if(i == ship.getShipSize() -1)
-                    this.getItem(this.getPosition(cell) + i).setStatus(Cell.Status.HORIZONTAL_BACK);
+                    this.getItem(this.getPosition(cell) + i).setSprite(Cell.Sprite.HORIZONTAL_BACK);
                 else
-                    this.getItem(this.getPosition(cell) + i).setStatus(Cell.Status.HORIZONTAL_BODY);
+                    this.getItem(this.getPosition(cell) + i).setSprite(Cell.Sprite.HORIZONTAL_BODY);
             }
         }
         else{
             for (int i = 0; i < ship.getShipSize(); i++) {
                 if(ship.getShipSize() == 1)
-                    this.getItem(this.getPosition(cell) + i*(10)).setStatus(Cell.Status.VERTICAL_SINGLE);
+                    this.getItem(this.getPosition(cell) + i*(10)).setSprite(Cell.Sprite.VERTICAL_SINGLE);
                 else
                 if(i == 0)
-                    this.getItem(this.getPosition(cell) + i*(10)).setStatus(Cell.Status.VERTICAL_FRONT);
+                    this.getItem(this.getPosition(cell) + i*(10)).setSprite(Cell.Sprite.VERTICAL_FRONT);
                 else
                 if(i == ship.getShipSize() -1 )
-                    this.getItem(this.getPosition(cell) + i*(10)).setStatus(Cell.Status.VERTICAL_BACK);
+                    this.getItem(this.getPosition(cell) + i*(10)).setSprite(Cell.Sprite.VERTICAL_BACK);
                 else
-                    this.getItem(this.getPosition(cell) + i*(10)).setStatus(Cell.Status.VERTICAL_BODY);
+                    this.getItem(this.getPosition(cell) + i*(10)).setSprite(Cell.Sprite.VERTICAL_BODY);
             }
         }
     }
@@ -76,13 +76,13 @@ public class AdapterBoard extends ArrayAdapter<Cell> implements Serializable {
         BaseShip ship=handler.deleteShipByCell(cell);
         if(ship!=null) {
             for (Cell cel:ship.getShipLoaction()) {
-                this.getItem(this.getPosition(cel)).setStatus(Cell.Status.VACANT);
+                this.getItem(this.getPosition(cel)).setSprite(Cell.Sprite.VACANT);
             }
         }
     }
 
     /**
-     * sets appearance color according to cell.status
+     * sets appearance color according to cell.Sprite
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -90,36 +90,60 @@ public class AdapterBoard extends ArrayAdapter<Cell> implements Serializable {
         Cell cell = getItem(position);
         Button button = (Button) view.findViewById(R.id.button_board_cell);
 
-        if (cell.getStatus() == Cell.Status.HIT)
+        if (cell.getSprite() == Cell.Sprite.HIT)
             button.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
-        else if (cell.getStatus() == Cell.Status.MISSED)
+        else if (cell.getSprite() == Cell.Sprite.MISSED)
             button.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.splash));
-        else if (cell.getStatus() == Cell.Status.VACANT) {
+        else if (cell.getSprite() == Cell.Sprite.VACANT) {
             //button.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorVacant));
         }
-        else if (cell.getStatus() == Cell.Status.HORIZONTAL_BODY) {
+        else if (cell.getSprite() == Cell.Sprite.HORIZONTAL_BODY) {
             button.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.horizontal_body));
         }
-        else if (cell.getStatus() == Cell.Status.HORIZONTAL_FRONT) {
+        else if (cell.getSprite() == Cell.Sprite.HORIZONTAL_FRONT) {
             button.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.horizontal_front));
         }
-        else if (cell.getStatus() == Cell.Status.HORIZONTAL_BACK) {
+        else if (cell.getSprite() == Cell.Sprite.HORIZONTAL_BACK) {
             button.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.horizontal_back));
         }
-        else if (cell.getStatus() == Cell.Status.HORIZONTAL_SINGLE) {
+        else if (cell.getSprite() == Cell.Sprite.HORIZONTAL_SINGLE) {
             button.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.horizontal_single));
         }
-        else if (cell.getStatus() == Cell.Status.VERTICAL_BODY) {
+        else if (cell.getSprite() == Cell.Sprite.VERTICAL_BODY) {
             button.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.vertical_body));
         }
-        else if (cell.getStatus() == Cell.Status.VERTICAL_FRONT) {
+        else if (cell.getSprite() == Cell.Sprite.VERTICAL_FRONT) {
             button.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.vertical_front));
         }
-        else if (cell.getStatus() == Cell.Status.VERTICAL_BACK) {
+        else if (cell.getSprite() == Cell.Sprite.VERTICAL_BACK) {
             button.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.vertical_back));
         }
-        else if (cell.getStatus() == Cell.Status.VERTICAL_SINGLE) {
+        else if (cell.getSprite() == Cell.Sprite.VERTICAL_SINGLE) {
             button.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.vertical_single));
+        }
+        else if (cell.getSprite() == Cell.Sprite.HORIZONTAL_BODY_HIT) {
+            button.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.horizontal_body_hit));
+        }
+        else if (cell.getSprite() == Cell.Sprite.HORIZONTAL_FRONT_HIT) {
+            button.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.horizontal_front_hit));
+        }
+        else if (cell.getSprite() == Cell.Sprite.HORIZONTAL_BACK_HIT) {
+            button.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.horizontal_back_hit));
+        }
+        else if (cell.getSprite() == Cell.Sprite.HORIZONTAL_SINGLE_HIT) {
+            button.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.horizontal_single_hit));
+        }
+        else if (cell.getSprite() == Cell.Sprite.VERTICAL_BODY_HIT) {
+            button.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.vertical_body_hit));
+        }
+        else if (cell.getSprite() == Cell.Sprite.VERTICAL_FRONT_HIT) {
+            button.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.vertical_front_hit));
+        }
+        else if (cell.getSprite() == Cell.Sprite.VERTICAL_BACK_HIT) {
+            button.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.vertical_back_hit));
+        }
+        else if (cell.getSprite() == Cell.Sprite.VERTICAL_SINGLE_HIT) {
+            button.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.vertical_single_hit));
         }
         return view;
     }
@@ -128,8 +152,8 @@ public class AdapterBoard extends ArrayAdapter<Cell> implements Serializable {
      * creates board with empty cells
      */
     public void createBattleField(int numCells) {
-            for (int y = 0; y < numCells; y++)
-                for(int x=0;x<numCells;x++)
-            this.add(new Cell(x,y));
+        for (int y = 0; y < numCells; y++)
+            for(int x=0;x<numCells;x++)
+                this.add(new Cell(x,y));
     }
 }

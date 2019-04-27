@@ -39,12 +39,11 @@ public abstract class BaseShip implements Serializable {
     }
     public boolean isAlive()
     {
-        boolean alive=false;
         for (Cell cell:cells) {
-            if(cell.getStatus() != Cell.Status.HIT)
-                alive=true;
+            if(cell.getStatus() == Cell.Status.VACANT)
+                return true;
         }
-        return alive;
+        return false;
     }
     public enum Rotation {HORIZONTAL, VERTICAL}
 
