@@ -5,11 +5,12 @@ import java.util.ArrayDeque;
 import java.util.Random;
 
 import team2.shattlebip.Models.Cell;
-import team2.shattlebip.Ships.BaseShip;
-import team2.shattlebip.Ships.FourDeckShip;
-import team2.shattlebip.Ships.OneDeckShip;
-import team2.shattlebip.Ships.ThreeDeckShip;
-import team2.shattlebip.Ships.TwoDeckShip;
+import team2.shattlebip.R;
+import team2.shattlebip.Models.Ships.BaseShip;
+import team2.shattlebip.Models.Ships.FourDeckShip;
+import team2.shattlebip.Models.Ships.OneDeckShip;
+import team2.shattlebip.Models.Ships.ThreeDeckShip;
+import team2.shattlebip.Models.Ships.TwoDeckShip;
 import team2.shattlebip.Controller.AdapterBoard;
 import team2.shattlebip.databinding.MainActivityBinding;
 

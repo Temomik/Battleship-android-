@@ -27,6 +27,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".Pages.FinalPage">
+            <intent-filter>
+                <action android:name="team2.shattlebip.Pages.FinalPage" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".Pages.Credits">
             <intent-filter>
                 <action android:name="team2.shattlebip.Pages.Credits" />

@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 import team2.shattlebip.ArrangeHandler;
-import team2.shattlebip.Ships.BaseShip;
+import team2.shattlebip.Models.Ships.BaseShip;
 import team2.shattlebip.Controller.AdapterBoard;
 
 public class Player {

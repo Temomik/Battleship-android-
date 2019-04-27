@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import team2.shattlebip.Controller.AdapterBoard;
-import team2.shattlebip.GameData;
+import team2.shattlebip.Models.GameData;
 import team2.shattlebip.Models.Cell;
 import team2.shattlebip.R;
 import team2.shattlebip.databinding.MainActivityBinding;

@@ -1,22 +1,20 @@
 package team2.shattlebip.Pages;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
-import team2.shattlebip.BattleStageHandler;
-import team2.shattlebip.GameData;
+import team2.shattlebip.GameHandlers.BattleStageHandler;
+import team2.shattlebip.Models.GameData;
 import team2.shattlebip.R;
 import team2.shattlebip.Models.Cell;
-import team2.shattlebip.Ships.BaseShip;
+import team2.shattlebip.Models.Ships.BaseShip;
 import team2.shattlebip.Controller.AdapterBoard;
 
 public class GameProcess extends AppCompatActivity {
@@ -29,6 +27,7 @@ public class GameProcess extends AppCompatActivity {
     private AdapterBoard hideBoard;
     private GameData gameData;
     private BattleStageHandler battleHandler;
+    private boolean isWin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +42,11 @@ public class GameProcess extends AppCompatActivity {
 //        enemyViewBoard = findViewById(R.id.gridViewBoard1);
 //        enemyViewBoard.setAdapter(enemyBoard);
 
-        hideBoard = new AdapterBoard(this, new ArrayList<Cell>());
-        hideBoard.clear();
-        hideBoard.createBattleField(10);
+//        hideBoard = new AdapterBoard(this, new ArrayList<Cell>());
+        hideBoard = gameData.getEnemy().getBoard();
+
+//        hideBoard.clear();
+//        hideBoard.createBattleField(10);
         hideViewBoard=findViewById(R.id.gridViewBoard1);
         hideViewBoard.setAdapter(hideBoard);
         makeShot();
@@ -78,11 +79,14 @@ public class GameProcess extends AppCompatActivity {
                         battleHandler.hitShip(cell);
                         if (!shipIter.isAlive()) {
                             battleHandler.blockAreaNearBy(hideBoard, shipIter);
+                            isWin=battleHandler.isWinCondition(gameData.getEnemy());
                         }
                         break;
                     }
                 }
                 hideBoard.notifyDataSetChanged();
+                if(isWin)
+                    setFinalStage();;
             }
         });
     }
@@ -118,5 +122,9 @@ public class GameProcess extends AppCompatActivity {
         return  true;
     }
 
+
+    private void setFinalStage() {
+        startActivity(new Intent("team2.shattlebip.Pages.FinalPage"));
+    }
 }
 

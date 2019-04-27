@@ -117,7 +117,6 @@
             android:text="@{arrangeHandler.countShipsLeftToArrange[3]}"
             android:gravity="center" />
 
-
         <TextView
             android:id="@+id/three_deck_count"
             android:layout_width="40dp"

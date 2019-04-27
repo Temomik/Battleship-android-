@@ -14,7 +14,7 @@ import java.util.List;
 import team2.shattlebip.ArrangeHandler;
 import team2.shattlebip.R;
 import team2.shattlebip.Models.Cell;
-import team2.shattlebip.Ships.BaseShip;
+import team2.shattlebip.Models.Ships.BaseShip;
 
 
 public class AdapterBoard extends ArrayAdapter<Cell> implements Serializable {
