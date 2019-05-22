@@ -20,6 +20,7 @@ import team2.shattlebip.Models.Ships.OneDeckShip;
 import team2.shattlebip.Models.Ships.ThreeDeckShip;
 import team2.shattlebip.Models.Ships.TwoDeckShip;
 import team2.shattlebip.Controller.AdapterBoard;
+import team2.shattlebip.Pages.MainMenu;
 import team2.shattlebip.R;
 import team2.shattlebip.databinding.MainActivityBinding;
 
@@ -182,9 +183,11 @@ public class GameData {
             }
         });
         disableClicking();
-        enemyBoard.clear();
-        enemyBoard.createBattleField(numCells1side);
-        enemy=new Player(enemyBoard);
+        if(MainMenu.isOnline==0) {
+            enemyBoard.clear();
+            enemyBoard.createBattleField(numCells1side);
+            enemy = new Player(enemyBoard);
+        }
         myViewBoard.setAdapter(myBoard);
         enableGameStageArranging();
     }
@@ -215,6 +218,7 @@ public class GameData {
                 myBoard.notifyDataSetChanged();
             }
         });
+        if(MainMenu.isOnline==0)
         enemy.arrangeShips();
     }
 

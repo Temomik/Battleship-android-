@@ -90,9 +90,7 @@ public class AdapterBoard extends ArrayAdapter<Cell> implements Serializable {
         Cell cell = getItem(position);
         Button button = (Button) view.findViewById(R.id.button_board_cell);
 
-        if (cell.getSprite() == Cell.Sprite.HIT)
-            button.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
-        else if (cell.getSprite() == Cell.Sprite.MISSED)
+        if (cell.getSprite() == Cell.Sprite.MISSED)
             button.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.splash));
         else if (cell.getSprite() == Cell.Sprite.VACANT) {
             //button.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorVacant));

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Battleship</string>
-    <string name="button_play">Play vs Bot</string>
+    <string name="button_play_bot">Play vs Bot</string>
+    <string name="button_play_human">Play vs Human</string>
     <string name="button_credits">credits</string>
     <string name="button_start_game">Start Game</string>
     <string name="button_exit_game">Exit</string>

@@ -29,14 +29,24 @@
             android:textSize="60sp" />
 
         <Button
-            android:id="@+id/startGameButton"
+            android:id="@+id/playBotButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="40dp"
             android:layout_marginRight="10dp"
             android:background="#BBDEFB"
-            android:text="@string/button_start_game" />
+            android:text="@string/button_play_bot" />
+
+        <Button
+            android:id="@+id/playOnlineButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="10dp"
+            android:background="#BBDEFB"
+            android:text="@string/button_play_human" />
 
         <Button
             android:id="@+id/showCreditsButton"

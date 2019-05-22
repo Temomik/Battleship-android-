@@ -9,25 +9,32 @@ import android.widget.Button;
 import team2.shattlebip.R;
 
 public class MainMenu extends AppCompatActivity implements View.OnClickListener {
-   private Button startGameButton;
+   private Button playWithBot;
+   private Button playWithHuman;
    private Button showCreditsButton;
    private Button exitButton;
+    public static int isOnline=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
 
-        startGameButton = (Button) findViewById(R.id.startGameButton);
-        startGameButton.setOnClickListener(this);
+        playWithBot = (Button) findViewById(R.id.playBotButton);
+        playWithBot.setOnClickListener(this);
+        playWithHuman = (Button) findViewById(R.id.playOnlineButton);
+        playWithHuman.setOnClickListener(this);
         showCreditsButton = (Button) findViewById(R.id.showCreditsButton);
         showCreditsButton.setOnClickListener(this);
         exitButton = (Button) findViewById(R.id.exitButton);
         exitButton.setOnClickListener(this);
     }
 
-    private void startGameButtonClick() {
+    private void playOnlineButtonClick() {
         startActivity(new Intent("team2.shattlebip.Pages.ConnectMenu"));
+    }
+    private void playWithBotButtonClick() {
+        startActivity(new Intent("team2.shattlebip.Pages.MainActivity"));
     }
 
     private void showCreditsButtonClick() {
@@ -41,8 +48,12 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.startGameButton:
-                startGameButtonClick();
+            case R.id.playOnlineButton:
+                isOnline=1;
+                playOnlineButtonClick();
+                break;
+            case R.id.playBotButton:
+                playWithBotButtonClick();
                 break;
             case R.id.showCreditsButton:
                 showCreditsButtonClick();
