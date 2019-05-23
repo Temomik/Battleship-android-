@@ -33,7 +33,7 @@ public class BattleStageHandler {
         return isWin;
     }
 
-    private void horizontalBlock(int size,int matrixIndex,Cell cell,AdapterBoard board) {
+    private void  horizontalBlock(int size,int matrixIndex,Cell cell,AdapterBoard board) {
         matrixIndex--;
         for (int i = 0; i <= size + 1; i++) {
             int tmpMatrixIndex = matrixIndex - 10;

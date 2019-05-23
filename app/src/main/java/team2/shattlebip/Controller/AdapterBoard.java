@@ -88,8 +88,9 @@ public class AdapterBoard extends ArrayAdapter<Cell> implements Serializable {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = inflater.inflate(R.layout.layout_cell, parent, false);
         Cell cell = getItem(position);
-        Button button = (Button) view.findViewById(R.id.button_board_cell);
-
+            Button button = (Button) view.findViewById(R.id.button_board_cell);
+            button.setHeight(10);
+            button.setWidth(10);
         if (cell.getSprite() == Cell.Sprite.MISSED)
             button.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.splash));
         else if (cell.getSprite() == Cell.Sprite.VACANT) {
@@ -142,6 +143,9 @@ public class AdapterBoard extends ArrayAdapter<Cell> implements Serializable {
         }
         else if (cell.getSprite() == Cell.Sprite.VERTICAL_SINGLE_HIT) {
             button.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.vertical_single_hit));
+        }
+        else if (cell.getSprite() == Cell.Sprite.HIT) {
+            button.setBackground(ContextCompat.getDrawable(getContext(),R.drawable.hit));
         }
         return view;
     }

@@ -147,10 +147,11 @@ public class GameProcess extends AppCompatActivity {
                     isHit = Cell.Status.HIT;
                     if (!ship.isAlive())
                         battleHandler.blockAreaNearBy(board, ship);
+                        isHit = Cell.Status.KILED;
                     break;
                 }
             }
-            if (isHit== Cell.Status.MISSED) {
+            if (isHit== Cell.Status.MISSED ) {
                 cell.setStatus(Cell.Status.MISSED);
                 cell.setSprite(Cell.Sprite.MISSED);
             }

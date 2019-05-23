@@ -1,6 +1,8 @@
 package team2.shattlebip.Models;
 
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -10,12 +12,18 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
 import java.util.Random;
 
 import team2.shattlebip.Controller.AdapterBoard;
 import team2.shattlebip.GameHandlers.BattleStageHandler;
 import team2.shattlebip.Models.Ships.BaseShip;
+import team2.shattlebip.Models.Ships.FourDeckShip;
+import team2.shattlebip.Models.Ships.OneDeckShip;
+import team2.shattlebip.Models.Ships.ThreeDeckShip;
+import team2.shattlebip.Models.Ships.TwoDeckShip;
 
 public class Client extends AsyncTask<Void, AdapterBoard, String> {
 
@@ -26,6 +34,7 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
     private String tosend = "";
     private Socket socket = null;
     private GridView hideViewBoard;
+    List<BaseShip> HitShipsCells = new ArrayList();
     private AdapterBoard hideBoard;
     private DataOutputStream dos;
     private DataInputStream dis;
@@ -55,8 +64,10 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
-    protected String doInBackground(Void... arg0) {
+    protected String doInBackground(Void... arg0)
+    {
 
         try {
             /*
@@ -83,6 +94,9 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
                             break;
                        case VACANT:
                            tosend = "Vacant";
+                        case KILED:
+                            tosend = "Kill";
+                            break;
                         default:
                             break;
                     }
@@ -109,9 +123,24 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
                                 hideBoard.getItem(Integer.parseInt(tosend)).setSprite(Cell.Sprite.MISSED);
                             }
                             else if(response.equals("Vacant")){}
-                            else {
+                            else if(response.equals("Hit")) {
                                 hideBoard.getItem(Integer.parseInt(tosend)).setStatus(Cell.Status.HIT);
-                                hideBoard.getItem(Integer.parseInt(tosend)).setSprite(Cell.Sprite.HORIZONTAL_BACK_HIT);
+                                hideBoard.getItem(Integer.parseInt(tosend)).setSprite(Cell.Sprite.HIT);
+                                BaseShip hitShip = new OneDeckShip();
+                                hitShip.addCell( hideBoard.getItem(Integer.parseInt(tosend)));
+                                HitShipsCells.add(hitShip);
+                            }
+                            else if(response.equals("Kill")) {
+                                if(hideBoard.getItem(Integer.parseInt(tosend)).getStatus() == Cell.Status.VACANT) {
+                                    hideBoard.getItem(Integer.parseInt(tosend)).setStatus(Cell.Status.HIT);
+                                    hideBoard.getItem(Integer.parseInt(tosend)).setSprite(Cell.Sprite.HIT);
+                                    BaseShip hitShip = new OneDeckShip();
+                                    hitShip.addCell( hideBoard.getItem(Integer.parseInt(tosend)));
+                                    HitShipsCells.add(hitShip);
+                                    for(int i = 0; i < HitShipsCells.size();i++) {
+                                                battleHandler.blockAreaNearBy(hideBoard, HitShipsCells.get(i));
+                                    }
+                                }
                             }
                         } catch (Exception e) {
                         }
@@ -161,8 +190,10 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
                 if (ship.getShipLoaction().contains(cell)) {
                     battleHandler.hitShip(cell);
                     isHit = Cell.Status.HIT;
-                    if (!ship.isAlive())
+                    if (!ship.isAlive()) {
                         battleHandler.blockAreaNearBy(board, ship);
+                        isHit = Cell.Status.KILED;
+                    }
                     break;
                 }
             }
