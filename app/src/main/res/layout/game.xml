@@ -29,7 +29,7 @@
             android:id="@+id/gridViewBoard1"
             style="@style/StyleGridViewBoard"
             android:layout_width="320dp"
-            android:layout_height="320dp"   ></GridView>
+            android:layout_height="320dp"></GridView>
 
         <GridView
             android:id="@+id/gridViewBoard2"
@@ -37,6 +37,14 @@
             android:layout_width="320dp"
             android:layout_height="320dp"></GridView>
     </LinearLayout>
+    <Button
+        android:id="@+id/turnButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/layout_grid"
+        android:layout_marginTop="500sp"
+        />
+
 
     <!--Layout for ship's images and their count-->
 

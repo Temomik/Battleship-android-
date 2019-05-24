@@ -102,84 +102,60 @@ public class GameData {
         me=new Player(myBoard);
         binding.setArrangeHandler(me.getArrangeHandler());
         me.getArrangeHandler().binding = this.binding;
-        buttonRestart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteButtonReleased();
-                initialize();
-                isShipButtonPressed = false;
-                me.getArrangeHandler().rotateVertical=0;
-                me.getArrangeHandler().updateRotateImage(rotateImage);
-                unmarkCurrentShip();
-            }
+        buttonRestart.setOnClickListener(v -> {
+            deleteButtonReleased();
+            initialize();
+            isShipButtonPressed = false;
+            me.getArrangeHandler().rotateVertical=0;
+            me.getArrangeHandler().updateRotateImage(rotateImage);
+            unmarkCurrentShip();
         });
-        buttonRotate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                me.getArrangeHandler().rotateVertical^=1;
-                me.getArrangeHandler().updateRotateImage(rotateImage);
-            }
+        buttonRotate.setOnClickListener(v -> {
+            me.getArrangeHandler().rotateVertical^=1;
+            me.getArrangeHandler().updateRotateImage(rotateImage);
         });
-        buttonRandom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                initialize();
-                isShipButtonPressed = false;
-                me.getArrangeHandler().arrangeShipsRandomly(myBoard);
-            }
+        buttonRandom.setOnClickListener(v -> {
+            initialize();
+            isShipButtonPressed = false;
+            me.getArrangeHandler().arrangeShipsRandomly(myBoard);
         });
-        SwitchShipSize[0].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                unmarkCurrentShip();
-                deleteButtonReleased();
-                SwitchShipSize[0].setBackground(ContextCompat.getDrawable(getContext(), R.drawable.noun_ship_s));
-                isShipButtonPressed = true;
-                currentShip = new OneDeckShip();
-            }
+        SwitchShipSize[0].setOnClickListener(view -> {
+            unmarkCurrentShip();
+            deleteButtonReleased();
+            SwitchShipSize[0].setBackground(ContextCompat.getDrawable(getContext(), R.drawable.noun_ship_s));
+            isShipButtonPressed = true;
+            currentShip = new OneDeckShip();
         });
-        SwitchShipSize[1].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                unmarkCurrentShip();
-                deleteButtonReleased();
-                SwitchShipSize[1].setBackground(ContextCompat.getDrawable(getContext(),R.drawable.noun_battleship_s));
-                isShipButtonPressed = true;
-                currentShip = new TwoDeckShip();
-            }
+        SwitchShipSize[1].setOnClickListener(view -> {
+            unmarkCurrentShip();
+            deleteButtonReleased();
+            SwitchShipSize[1].setBackground(ContextCompat.getDrawable(getContext(),R.drawable.noun_battleship_s));
+            isShipButtonPressed = true;
+            currentShip = new TwoDeckShip();
         });
-        SwitchShipSize[2].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                unmarkCurrentShip();
-                deleteButtonReleased();
-                SwitchShipSize[2].setBackground(ContextCompat.getDrawable(getContext(),R.drawable.noun_military_ship_s));
-                isShipButtonPressed = true;
-                currentShip = new ThreeDeckShip();
-            }
+        SwitchShipSize[2].setOnClickListener(view -> {
+            unmarkCurrentShip();
+            deleteButtonReleased();
+            SwitchShipSize[2].setBackground(ContextCompat.getDrawable(getContext(),R.drawable.noun_military_ship_s));
+            isShipButtonPressed = true;
+            currentShip = new ThreeDeckShip();
         });
-        SwitchShipSize[3].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                unmarkCurrentShip();
-                deleteButtonReleased();
-                SwitchShipSize[3].setBackground(ContextCompat.getDrawable(getContext(),R.drawable.noun_warship_s));
-                isShipButtonPressed = true;
-                currentShip = new FourDeckShip();
-            }
+        SwitchShipSize[3].setOnClickListener(view -> {
+            unmarkCurrentShip();
+            deleteButtonReleased();
+            SwitchShipSize[3].setBackground(ContextCompat.getDrawable(getContext(),R.drawable.noun_warship_s));
+            isShipButtonPressed = true;
+            currentShip = new FourDeckShip();
         });
-        buttonDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                unmarkCurrentShip();
-                isShipButtonPressed = false;
-                if(isDeleteButtonPressed == false) {
-                    deleteButtonPressed();
-                    deleteImage.setText("Delete mode!!!");
-                } else {
-                    isDeleteButtonPressed = false;
-                    deleteImage.setText("");
-                }
+        buttonDelete.setOnClickListener(view -> {
+            unmarkCurrentShip();
+            isShipButtonPressed = false;
+            if(isDeleteButtonPressed == false) {
+                deleteButtonPressed();
+                deleteImage.setText("Delete mode!!!");
+            } else {
+                isDeleteButtonPressed = false;
+                deleteImage.setText("");
             }
         });
         disableClicking();
@@ -204,19 +180,16 @@ public class GameData {
      * method to arrange ships
      */
     private void letP1arrange() {
-        myViewBoard.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Cell cell = (Cell) parent.getAdapter().getItem(position);
-                me.getArrangeHandler().isShipSelected=isShipButtonPressed;
-                if(me.getArrangeHandler().isShipSelected) {
-                    placeShipOnBoard(cell);
-                }
-                if(isDeleteButtonPressed) {
-                    myBoard.delete(cell,me.getArrangeHandler());
-                }
-                myBoard.notifyDataSetChanged();
+        myViewBoard.setOnItemClickListener((parent, view, position, id) -> {
+            Cell cell = (Cell) parent.getAdapter().getItem(position);
+            me.getArrangeHandler().isShipSelected=isShipButtonPressed;
+            if(me.getArrangeHandler().isShipSelected) {
+                placeShipOnBoard(cell);
             }
+            if(isDeleteButtonPressed) {
+                myBoard.delete(cell,me.getArrangeHandler());
+            }
+            myBoard.notifyDataSetChanged();
         });
         if(MainMenu.isOnline==0)
         enemy.arrangeShips();

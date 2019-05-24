@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 
 import java.util.ArrayList;
@@ -24,10 +26,11 @@ public class GameProcess extends AppCompatActivity {
 
     private GridView myViewBoard;
     private GridView enemyViewBoard;
-    private GridView hideViewBoard;
+        private GridView hideViewBoard;
     private AdapterBoard myBoard;
     private AdapterBoard enemyBoard;
     private AdapterBoard hideBoard;
+    private Button turn;
     private GameData gameData;
     private BattleStageHandler battleHandler;
     private Stack<Cell> cellStack=new Stack<>();
@@ -42,19 +45,28 @@ public class GameProcess extends AppCompatActivity {
         gameData = GameData.getInstance();
         myViewBoard = findViewById(R.id.gridViewBoard2);
         myBoard = gameData.getMe().getBoard();
+        myBoard.setSize(80,80);
+        myViewBoard.setColumnWidth(80);
         myViewBoard.setAdapter(myBoard);
+//        ViewGroup.LayoutParams viewParam =  myViewBoard.getLayoutParams();
+//        viewParam.
         if(MainMenu.isOnline==0)
         enemyBoard = gameData.getEnemy().getBoard();
+//        enemyBoard.setSize(40,40);
+//        enemyViewBoard.setColumnWidth(40);
 //        enemyViewBoard = findViewById(R.id.gridViewBoard1);
 //        enemyViewBoard.setAdapter(enemyBoard);
 
         hideBoard = new AdapterBoard(this, new ArrayList<Cell>());
+        hideBoard.setSize(90,90);
         //hideBoard = gameData.getEnemy().getBoard();
 
         hideBoard.clear();
         hideBoard.createBattleField(10);
         hideViewBoard=findViewById(R.id.gridViewBoard1);
+        hideViewBoard.setColumnWidth(90);
         hideViewBoard.setAdapter(hideBoard);
+        turn = findViewById(R.id.turnButton);
         if(MainMenu.isOnline==0)
         makeShot();
         else if(MainMenu.isOnline==1)
@@ -168,7 +180,7 @@ public class GameProcess extends AppCompatActivity {
 
     private void makeOnlineShot()
     {
-        Client client=new Client(hideViewBoard,hideBoard);
+        Client client=new Client(hideViewBoard,hideBoard,turn);
         client.execute();
     }
 }

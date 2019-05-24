@@ -9,7 +9,7 @@ public class Cell implements Serializable {
     private Sprite sprite;
     private int X;
     private int Y;
-    public Cell(int x, int y) {
+    public  Cell(int x, int y) {
         X=x;
         Y=y;
         status=Status.VACANT;

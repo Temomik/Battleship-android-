@@ -1,12 +1,15 @@
 package team2.shattlebip.Controller;
 
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import java.io.Serializable;
 import java.util.List;
@@ -20,7 +23,8 @@ import team2.shattlebip.Models.Ships.BaseShip;
 public class AdapterBoard extends ArrayAdapter<Cell> implements Serializable {
     private LayoutInflater inflater;
     private List<Cell> objects;
-
+    private int width;
+    private int height;
     public List<Cell> getObjects() {
         return objects;
     }
@@ -30,7 +34,15 @@ public class AdapterBoard extends ArrayAdapter<Cell> implements Serializable {
         super(newContext, -1, newObjects);
         inflater = LayoutInflater.from(newContext);
         objects = newObjects;
+        width = 100;
+        height = 100;
     }
+
+    public void setSize(int width,int height) {
+        this.width = width;
+        this.height = height;
+    }
+
     /*public void setInflater(Context context, GridView viewBoard)
     {
         inflater=LayoutInflater.from(context);
@@ -81,16 +93,40 @@ public class AdapterBoard extends ArrayAdapter<Cell> implements Serializable {
         }
     }
 
+//    @RequiresApi(api = Build.VERSION_CODES.N)
+//    public void setSize(int x, int y) {
+//        objects.forEach(item->{
+////            item.
+//        });
+//    }
+
     /**
      * sets appearance color according to cell.Sprite
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = inflater.inflate(R.layout.layout_cell, parent, false);
+//        d
+//        RelativeLayout relativeLayout = inflater.inflate(R.layout.ce, parent, false);
+//        relativeLayout.getLayoutParams().width = 20;
+//        relativeLayout.getLayoutParams().height = 20;
+//        relativeLayout.requestLayout();
+
+//        RelativeLayout rl = (RelativeLayout)findViewById(R.id.buttonCell);
+//        rl.getLayoutParams().height = 100;
+//        rl.getLayoutParams().width = 100;
+        View tmpview = inflater.inflate(R.layout.layout_cell, parent, false);
+        tmpview.getLayoutParams().width = width;
+        tmpview.getLayoutParams().height = height;
+        tmpview.setPadding(0,0,0,0);
+        View view = tmpview;
+//        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();\
+//        view.getLayoutParams().width = width;
+//        view.getLayoutParams().height = height;
+//        view.setPadding(0,0,0,0)    ;
+//        view.requestLayout();
+//        view.setLayoutParams(layoutParams);
         Cell cell = getItem(position);
-            Button button = (Button) view.findViewById(R.id.button_board_cell);
-            button.setHeight(10);
-            button.setWidth(10);
+        Button button = (Button) view.findViewById(R.id.button_board_cell);
         if (cell.getSprite() == Cell.Sprite.MISSED)
             button.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.splash));
         else if (cell.getSprite() == Cell.Sprite.VACANT) {

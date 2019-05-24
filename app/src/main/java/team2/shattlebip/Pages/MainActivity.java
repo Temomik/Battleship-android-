@@ -76,8 +76,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SwitchShipSize[2] = (Button) findViewById(R.id.three_deck_ship);
         SwitchShipSize[3] = (Button) findViewById(R.id.four_deck_ship);
         myViewBoard = (GridView) findViewById(R.id.gridViewBoard1);
+//        myViewBoard.setPadding(0,0,0,0);
+//        myViewBoard.setColumnWidth(60);
+//        myViewBoard.set
+//        myViewBoard.vers/
         myBoard = new AdapterBoard(this, new ArrayList<Cell>());
+        myBoard.setSize(90,90);
+        myViewBoard.setColumnWidth(90);
         enemyBoard=new AdapterBoard(this,new ArrayList<Cell>());
+        enemyBoard.setSize(40,40);
     }
     private void startGameButtonClick() {
         if(GameData.getInstance().getMe().getArrangeHandler().getShipCount()==10) {

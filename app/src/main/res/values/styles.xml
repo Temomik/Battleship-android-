@@ -9,8 +9,6 @@
 
 
     <style name="StyleGridViewBoard">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:numColumns">@integer/num_cells_board_side</item>
         <item name="android:columnWidth">@dimen/cell_side_length</item>
         <item name="android:stretchMode">none</item>

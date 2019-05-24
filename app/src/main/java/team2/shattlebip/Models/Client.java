@@ -3,8 +3,10 @@ package team2.shattlebip.Models;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 
 import java.io.DataInputStream;
@@ -24,6 +26,7 @@ import team2.shattlebip.Models.Ships.FourDeckShip;
 import team2.shattlebip.Models.Ships.OneDeckShip;
 import team2.shattlebip.Models.Ships.ThreeDeckShip;
 import team2.shattlebip.Models.Ships.TwoDeckShip;
+import team2.shattlebip.R;
 
 public class Client extends AsyncTask<Void, AdapterBoard, String> {
 
@@ -31,6 +34,7 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
     private int dstPort = 5057;
     private String response = "";
     private String receive = "";
+    private Button turn;
     private String tosend = "";
     private Socket socket = null;
     private GridView hideViewBoard;
@@ -41,16 +45,18 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
     private BattleStageHandler battleHandler = new BattleStageHandler();
     private GameData gameData = GameData.getInstance();
 
-    public Client(GridView _hideViewBoard, AdapterBoard _hideBoard) {
+    public Client(GridView _hideViewBoard, AdapterBoard _hideBoard,Button turn) {
         hideBoard = _hideBoard;
         hideViewBoard = _hideViewBoard;
         hideViewBoard.setAdapter(hideBoard);
+        this.turn = turn;
     }
 
     @Override
     protected void onProgressUpdate(AdapterBoard... values) {
         super.onProgressUpdate(values);
         values[0].notifyDataSetChanged();
+        turn.setBackgroundColor(10);
     }
 
     @Override
