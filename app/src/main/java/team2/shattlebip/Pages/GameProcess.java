@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 
 import java.util.ArrayList;
 import java.util.Deque;
@@ -30,7 +31,7 @@ public class GameProcess extends AppCompatActivity {
     private AdapterBoard myBoard;
     private AdapterBoard enemyBoard;
     private AdapterBoard hideBoard;
-    private Button turn;
+    private ImageButton turn;
     private GameData gameData;
     private BattleStageHandler battleHandler;
     private Stack<Cell> cellStack=new Stack<>();
@@ -48,18 +49,11 @@ public class GameProcess extends AppCompatActivity {
         myBoard.setSize(80,80);
         myViewBoard.setColumnWidth(80);
         myViewBoard.setAdapter(myBoard);
-//        ViewGroup.LayoutParams viewParam =  myViewBoard.getLayoutParams();
-//        viewParam.
         if(MainMenu.isOnline==0)
         enemyBoard = gameData.getEnemy().getBoard();
-//        enemyBoard.setSize(40,40);
-//        enemyViewBoard.setColumnWidth(40);
-//        enemyViewBoard = findViewById(R.id.gridViewBoard1);
-//        enemyViewBoard.setAdapter(enemyBoard);
 
         hideBoard = new AdapterBoard(this, new ArrayList<Cell>());
         hideBoard.setSize(90,90);
-        //hideBoard = gameData.getEnemy().getBoard();
 
         hideBoard.clear();
         hideBoard.createBattleField(10);
@@ -80,8 +74,11 @@ public class GameProcess extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cell cell = enemyBoard.getItem(position);
-                if(shotHandler(enemyBoard,gameData.getEnemy().getShips(),cell)== Cell.Status.MISSED)
+                if(shotHandler(enemyBoard,gameData.getEnemy().getShips(),cell)== Cell.Status.MISSED) {
+                    turn.setImageResource(R.drawable.enemy);
                     botResponseShot();
+                }
+                turn.setImageResource(R.drawable.you);
                 hideBoard.getItem(cell.getY()*10 + cell.getX()).setStatus(cell.getStatus());
                 hideBoard.getItem(cell.getY()*10 + cell.getX()).setSprite(cell.getSprite());
 

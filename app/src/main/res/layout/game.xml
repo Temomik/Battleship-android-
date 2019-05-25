@@ -9,7 +9,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="team2.shattlebip.Pages.MainActivity">
     <!--Main panel-->
-    <LinearLayout
         android:id="@+id/layout_grid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,6 +20,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/TextBoard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Enemie's board" />
@@ -28,33 +28,22 @@
         <GridView
             android:id="@+id/gridViewBoard1"
             style="@style/StyleGridViewBoard"
+            android:layout_below="@id/TextBoard"
             android:layout_width="320dp"
+            android:layout_marginLeft="10sp"
             android:layout_height="320dp"></GridView>
-
-        <GridView
+    <GridView
             android:id="@+id/gridViewBoard2"
+            android:layout_below="@id/gridViewBoard1"
             style="@style/StyleGridViewBoard"
-            android:layout_width="320dp"
+            android:layout_marginLeft="10sp"
+            android:layout_width="280dp"
             android:layout_height="320dp"></GridView>
-    </LinearLayout>
-    <Button
+    <ImageButton
         android:id="@+id/turnButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/layout_grid"
-        android:layout_marginTop="500sp"
-        />
-
-
-    <!--Layout for ship's images and their count-->
-
-    <!--Panel of actions while ship arranging -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="35px"/>
-
+        android:layout_toRightOf="@id/gridViewBoard2"
+        android:layout_below="@id/gridViewBoard1"
+        android:layout_width="70sp"
+        android:layout_height="70sp"
+        android:src="@drawable/you"/>
 </RelativeLayout>

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -34,7 +35,7 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
     private int dstPort = 5057;
     private String response = "";
     private String receive = "";
-    private Button turn;
+    private ImageButton turn;
     private String tosend = "";
     private Socket socket = null;
     private GridView hideViewBoard;
@@ -45,7 +46,7 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
     private BattleStageHandler battleHandler = new BattleStageHandler();
     private GameData gameData = GameData.getInstance();
 
-    public Client(GridView _hideViewBoard, AdapterBoard _hideBoard,Button turn) {
+    public Client(GridView _hideViewBoard, AdapterBoard _hideBoard,ImageButton turn) {
         hideBoard = _hideBoard;
         hideViewBoard = _hideViewBoard;
         hideViewBoard.setAdapter(hideBoard);
@@ -56,7 +57,15 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
     protected void onProgressUpdate(AdapterBoard... values) {
         super.onProgressUpdate(values);
         values[0].notifyDataSetChanged();
-        turn.setBackgroundColor(10);
+        if (tosend.equals("Vacant") || tosend.equals("Kill")) {
+            turn.setImageResource(R.drawable.enemy);
+        }
+        if(tosend.equals("Miss"))
+            turn.setImageResource(R.drawable.you);
+        if(receive.equals("Hit") || receive.equals("Youbegin"))
+            turn.setImageResource(R.drawable.you);
+        else
+            turn.setImageResource(R.drawable.enemy);
     }
 
     @Override
