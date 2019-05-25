@@ -1,5 +1,7 @@
 package team2.shattlebip.Models;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -27,6 +29,8 @@ import team2.shattlebip.Models.Ships.FourDeckShip;
 import team2.shattlebip.Models.Ships.OneDeckShip;
 import team2.shattlebip.Models.Ships.ThreeDeckShip;
 import team2.shattlebip.Models.Ships.TwoDeckShip;
+import team2.shattlebip.Pages.FinalPage;
+import team2.shattlebip.Pages.FinalPageLose;
 import team2.shattlebip.R;
 
 public class Client extends AsyncTask<Void, AdapterBoard, String> {
@@ -45,27 +49,58 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
     private DataInputStream dis;
     private BattleStageHandler battleHandler = new BattleStageHandler();
     private GameData gameData = GameData.getInstance();
+    private int onProgressUpdateNum = 0;
+    private Context context;
 
-    public Client(GridView _hideViewBoard, AdapterBoard _hideBoard,ImageButton turn) {
+    public Client(GridView _hideViewBoard, AdapterBoard _hideBoard,ImageButton turn, Context context) {
         hideBoard = _hideBoard;
         hideViewBoard = _hideViewBoard;
         hideViewBoard.setAdapter(hideBoard);
         this.turn = turn;
+        this.context=context.getApplicationContext();
     }
 
     @Override
     protected void onProgressUpdate(AdapterBoard... values) {
         super.onProgressUpdate(values);
-        values[0].notifyDataSetChanged();
-        if (tosend.equals("Vacant") || tosend.equals("Kill")) {
-            turn.setImageResource(R.drawable.enemy);
+        gameData.getMe().getBoard().notifyDataSetChanged();
+        hideBoard.notifyDataSetChanged();
+        switch (onProgressUpdateNum) {
+            case 0:
+                break;
+            case 1:
+                    turn.setImageResource(R.drawable.enemy);
+                break;
+            case 2:
+                    turn.setImageResource(R.drawable.you);
+                break;
+            default:
+                break;
         }
-        if(tosend.equals("Miss"))
-            turn.setImageResource(R.drawable.you);
-        if(receive.equals("Hit") || receive.equals("Youbegin"))
-            turn.setImageResource(R.drawable.you);
+
+//        if(receive.equals("Hit") || receive.equals("Youbegin") || receive.equals("Kill"))
+//            turn.setImageResource(R.drawable.you);
+//        else if(receive.equals("Miss") || receive.equals("You will be second"))
+//            turn.setImageResource(R.drawable.enemy);
+//        if (tosend.equals("Hit") || tosend.equals("Kill"))
+//            turn.setImageResource(R.drawable.enemy);
+//        else if(tosend.equals("Miss"))
+//            turn.setImageResource(R.drawable.you);
+    }
+    @Override
+    protected void onPostExecute(String result) {
+        super.onPostExecute(result);
+        if(result.equals("Win")) {
+            Intent winintent = new Intent(context, FinalPage.class);
+            winintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(winintent);
+        }
         else
-            turn.setImageResource(R.drawable.enemy);
+        {
+            Intent loseintent = new Intent(context, FinalPageLose.class);
+            loseintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(loseintent);
+        }
     }
 
     @Override
@@ -93,10 +128,10 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
             dos = new DataOutputStream(socket.getOutputStream());
             receive = dis.readUTF();
             Cell.Status status;
+
             while (true) {
                 receive = dis.readUTF();
                 if (isNumber(receive)) {
-                    // System.out.println("Answer was it Hit or Miss");
                     Cell cel = gameData.getMe().getBoard().getItem(Integer.parseInt(receive));
                     status=shotHandler(gameData.getMe().getBoard(), gameData.getMe().getShips(), cel);
                     switch (status)
@@ -112,21 +147,24 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
                         case KILED:
                             tosend = "Kill";
                             break;
+                        case WIN:
+                            tosend="Win";
+                            break;
                         default:
                             break;
                     }
                     dos.writeUTF(tosend);
                     dos.flush();
-                    publishProgress(gameData.getMe().getBoard());
+                    onProgressUpdateNum = 0;
+                    publishProgress();
+                    if(tosend.equals("Win"))
+                        return "Lose";
                 }
                 if (receive.equals("Youbegin") || tosend.equals("Miss")) {
+                    onProgressUpdateNum = 2;
+                    publishProgress();
                     tosend = "";
                     while (!response.equals("Miss")) {
-                       /* hideViewBoard.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {*/
-                                /*Cell cell = hideBoard.getItem(position);
-                                tosend=String.valueOf(cell.getY()*10+cell.getX());*/
                         try {
                             while (tosend.equals("")) {
                             }
@@ -136,6 +174,7 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
                             if (response.equals("Miss")) {
                                 hideBoard.getItem(Integer.parseInt(tosend)).setStatus(Cell.Status.MISSED);
                                 hideBoard.getItem(Integer.parseInt(tosend)).setSprite(Cell.Sprite.MISSED);
+
                             }
                             else if(response.equals("Vacant")){}
                             else if(response.equals("Hit")) {
@@ -157,13 +196,22 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
                                     }
                                 }
                             }
+                            else if(response.equals("Win"))
+                                return "Win";
                         } catch (Exception e) {
                         }
-                        publishProgress(hideBoard);/*
+                        onProgressUpdateNum = 0;
+                        publishProgress(hideBoard);
+                        /*
                             }
                        });*/
                         tosend = "";
+
+                        onProgressUpdateNum = 0;
+                        publishProgress();
                     }
+                        onProgressUpdateNum = 1;
+                        publishProgress();
                     response = "";
                     tosend = "";
                 }
@@ -188,7 +236,19 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
         }
         return response;
     }
-
+    public boolean isWinCondition(Deque<BaseShip> ships)
+    {
+        boolean isWin=true;
+        for(BaseShip ship:ships)
+        {
+            if(ship.isAlive())
+            {
+                isWin=false;
+                break;
+            }
+        }
+        return isWin;
+    }
     static boolean isNumber(String s) {
         for (int i = 0; i < s.length(); i++)
             if (Character.isDigit(s.charAt(i))
@@ -198,20 +258,24 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
         return true;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private Cell.Status shotHandler(AdapterBoard board, Deque<BaseShip> ships, Cell cell) {
-        Cell.Status isHit = Cell.Status.MISSED;
         if (cell.isReadyToInteraction()) {
-            for (BaseShip ship : ships) {
+            ships.stream().forEach(ship->
+            {
+                Cell.Status isHit = Cell.Status.MISSED;
                 if (ship.getShipLoaction().contains(cell)) {
                     battleHandler.hitShip(cell);
                     isHit = Cell.Status.HIT;
                     if (!ship.isAlive()) {
                         battleHandler.blockAreaNearBy(board, ship);
                         isHit = Cell.Status.KILED;
+                        if (isWinCondition(ships))
+                            isHit = Cell.Status.WIN;
                     }
-                    break;
                 }
-            }
+            });
+
             if (isHit == Cell.Status.MISSED) {
                 cell.setStatus(Cell.Status.MISSED);
                 cell.setSprite(Cell.Sprite.MISSED);

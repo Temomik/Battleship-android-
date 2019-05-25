@@ -8,13 +8,13 @@ import android.widget.Button;
 
 import team2.shattlebip.R;
 
-public class FinalPage extends AppCompatActivity implements View.OnClickListener {
+public class FinalPageLose extends AppCompatActivity implements View.OnClickListener {
 
     private Button exitButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.final_page_win);
+        setContentView(R.layout.final_page_lose);
         exitButton = (Button) findViewById(R.id.exitButton);
         exitButton.setOnClickListener(this);
     }

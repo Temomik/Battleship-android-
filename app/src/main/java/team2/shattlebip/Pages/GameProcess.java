@@ -177,7 +177,7 @@ public class GameProcess extends AppCompatActivity {
 
     private void makeOnlineShot()
     {
-        Client client=new Client(hideViewBoard,hideBoard,turn);
+        Client client=new Client(hideViewBoard,hideBoard,turn,this);
         client.execute();
     }
 }

@@ -45,5 +45,5 @@
         android:layout_below="@id/gridViewBoard1"
         android:layout_width="70sp"
         android:layout_height="70sp"
-        android:src="@drawable/you"/>
+        android:src="@drawable/wait"/>
 </RelativeLayout>

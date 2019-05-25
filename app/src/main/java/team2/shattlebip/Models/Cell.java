@@ -43,7 +43,8 @@ public class Cell implements Serializable {
         VACANT,
         HIT,
         MISSED,
-        KILED
+        KILED,
+        WIN
     }
     public  enum Sprite {
         VACANT,
