@@ -25,10 +25,6 @@ public class AdapterBoard extends ArrayAdapter<Cell> implements Serializable {
     private List<Cell> objects;
     private int width;
     private int height;
-    public List<Cell> getObjects() {
-        return objects;
-    }
-
 
     public AdapterBoard(Context newContext, List<Cell> newObjects) {
         super(newContext, -1, newObjects);
@@ -42,12 +38,6 @@ public class AdapterBoard extends ArrayAdapter<Cell> implements Serializable {
         this.width = width;
         this.height = height;
     }
-
-    /*public void setInflater(Context context, GridView viewBoard)
-    {
-        inflater=LayoutInflater.from(context);
-        inflater.inflate(R.layout.layout_cell, viewBoard, false);
-    }*/
 
     /**
      * now takes BaseShip as a parameter
@@ -92,13 +82,6 @@ public class AdapterBoard extends ArrayAdapter<Cell> implements Serializable {
             }
         }
     }
-
-//    @RequiresApi(api = Build.VERSION_CODES.N)
-//    public void setSize(int x, int y) {
-//        objects.forEach(item->{
-////            item.
-//        });
-//    }
 
     /**
      * sets appearance color according to cell.Sprite

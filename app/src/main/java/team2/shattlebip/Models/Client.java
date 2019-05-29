@@ -29,13 +29,14 @@ import team2.shattlebip.Models.Ships.FourDeckShip;
 import team2.shattlebip.Models.Ships.OneDeckShip;
 import team2.shattlebip.Models.Ships.ThreeDeckShip;
 import team2.shattlebip.Models.Ships.TwoDeckShip;
+import team2.shattlebip.Pages.ConnectionError;
 import team2.shattlebip.Pages.FinalPage;
 import team2.shattlebip.Pages.FinalPageLose;
 import team2.shattlebip.R;
 
 public class Client extends AsyncTask<Void, AdapterBoard, String> {
 
-    private String dstAddress = "159.89.99.20";
+    private String dstAddress = "192.168.56.1";
     private int dstPort = 5057;
     private String response = "";
     private String receive = "";
@@ -90,8 +91,8 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        if(result.equals("Win")) {
-            Intent winintent = new Intent(context, FinalPage.class);
+        if(result.equals("Win")||result.equals("Error")) {
+            Intent winintent = new Intent(context, ConnectionError.class);
             winintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(winintent);
         }
@@ -131,6 +132,8 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
 
             while (true) {
                 receive = dis.readUTF();
+                if(receive.equals("ERROR"))
+                    return "Error";
                 if (isNumber(receive)) {
                     Cell cel = gameData.getMe().getBoard().getItem(Integer.parseInt(receive));
                     status=shotHandler(gameData.getMe().getBoard(), gameData.getMe().getShips(), cel);
@@ -142,7 +145,7 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
                         case MISSED:
                             tosend = "Miss";
                             break;
-                       case VACANT:
+                        case VACANT:
                            tosend = "Vacant";
                         case KILED:
                             tosend = "Kill";
@@ -174,7 +177,6 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
                             if (response.equals("Miss")) {
                                 hideBoard.getItem(Integer.parseInt(tosend)).setStatus(Cell.Status.MISSED);
                                 hideBoard.getItem(Integer.parseInt(tosend)).setSprite(Cell.Sprite.MISSED);
-
                             }
                             else if(response.equals("Vacant")){}
                             else if(response.equals("Hit")) {
@@ -196,9 +198,14 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
                                     }
                                 }
                             }
+                            else if(response.equals("ERROR"))
+                                return "Error";
                             else if(response.equals("Win"))
                                 return "Win";
                         } catch (Exception e) {
+                            Intent winintent = new Intent(context, ConnectionError.class);
+                            winintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            context.startActivity(winintent);
                         }
                         onProgressUpdateNum = 0;
                         publishProgress(hideBoard);
@@ -224,10 +231,18 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
             // TODO Auto-generated catch block
             e.printStackTrace();
             response = "IOException: " + e.toString();
-        } finally {
+        }
+        catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            response = "IOException: " + e.toString();
+        }finally {
             if (socket != null) {
                 try {
                     socket.close();
+                    Intent winintent = new Intent(context, ConnectionError.class);
+                    winintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(winintent);
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -261,9 +276,9 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private Cell.Status shotHandler(AdapterBoard board, Deque<BaseShip> ships, Cell cell) {
         if (cell.isReadyToInteraction()) {
-            ships.stream().forEach(ship->
+            Cell.Status isHit = Cell.Status.MISSED;
+            for(BaseShip ship : ships)
             {
-                Cell.Status isHit = Cell.Status.MISSED;
                 if (ship.getShipLoaction().contains(cell)) {
                     battleHandler.hitShip(cell);
                     isHit = Cell.Status.HIT;
@@ -274,13 +289,11 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
                             isHit = Cell.Status.WIN;
                     }
                 }
-            });
-
+            }
             if (isHit == Cell.Status.MISSED) {
                 cell.setStatus(Cell.Status.MISSED);
                 cell.setSprite(Cell.Sprite.MISSED);
             }
-            //board.notifyDataSetChanged();
             return isHit;
         }
         return Cell.Status.VACANT;

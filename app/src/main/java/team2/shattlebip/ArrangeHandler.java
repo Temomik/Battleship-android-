@@ -31,7 +31,6 @@ public class ArrangeHandler {
         this.isShipSelected=false;
 
     }
-
     public String[] getCountShipsLeftToArrange() {
         String[] tmp = new String[4];
         for(int i = 0;i < 4;i++){
@@ -39,7 +38,6 @@ public class ArrangeHandler {
         }
         return  tmp;
     }
-
     public void addShip(BaseShip ship)
     {
         if(rotateVertical == 1)
@@ -60,22 +58,29 @@ public class ArrangeHandler {
         if(isCollision(cell,ship))
             return false;
         if(ship.getRotation()== BaseShip.Rotation.HORIZONTAL) {
-            for (int i = 0; i < ship.getShipSize(); i++)
-                ship.addCell(board.getItem(board.getPosition(cell) + i));
+            placeShipHorizontally(ship,cell,board);
         }
         else
-            for (int i = 0; i < ship.getShipSize(); i++)
-                ship.addCell(board.getItem(board.getPosition(cell) + (i*10)));
+            placeShipVertically(ship,cell,board);
         decreaseShipCount(ship);
         board.update(cell,ship);
         isShipSelected=false;
         return true;
     }
-    private boolean isCollision(Cell cell, BaseShip ship) {
 
+    private void placeShipHorizontally(BaseShip ship, Cell cell, AdapterBoard board)
+    {
+        for (int i = 0; i < ship.getShipSize(); i++)
+            ship.addCell(board.getItem(board.getPosition(cell) + i));
+    }
+    private void placeShipVertically(BaseShip ship, Cell cell, AdapterBoard board)
+    {
+        for (int i = 0; i < ship.getShipSize(); i++)
+            ship.addCell(board.getItem(board.getPosition(cell) + (i*10)));
+    }
+    private boolean isCollision(Cell cell, BaseShip ship) {
         int x = cell.getX();
         int y = cell.getY();
-
         return ship.getRotation() == BaseShip.Rotation.HORIZONTAL?!canHorizontallyArrange(x,y,ship):
                 !canVerticallyArrange(x,y,ship);
     }

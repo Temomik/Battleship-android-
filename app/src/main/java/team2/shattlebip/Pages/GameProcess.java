@@ -26,8 +26,7 @@ import team2.shattlebip.Controller.AdapterBoard;
 public class GameProcess extends AppCompatActivity {
 
     private GridView myViewBoard;
-    private GridView enemyViewBoard;
-        private GridView hideViewBoard;
+    private GridView hideViewBoard;
     private AdapterBoard myBoard;
     private AdapterBoard enemyBoard;
     private AdapterBoard hideBoard;
@@ -69,33 +68,29 @@ public class GameProcess extends AppCompatActivity {
 
     private void makeShot()
     {
-        hideViewBoard.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Cell cell = enemyBoard.getItem(position);
-                if(shotHandler(enemyBoard,gameData.getEnemy().getShips(),cell)== Cell.Status.MISSED) {
-                    turn.setImageResource(R.drawable.enemy);
-                    botResponseShot();
-                }
-                turn.setImageResource(R.drawable.you);
-                hideBoard.getItem(cell.getY()*10 + cell.getX()).setStatus(cell.getStatus());
-                hideBoard.getItem(cell.getY()*10 + cell.getX()).setSprite(cell.getSprite());
-
-                for (BaseShip shipIter : gameData.getEnemy().getShips()) {
-                    if (shipIter.getShipLoaction().contains(cell)) {
-                        battleHandler.hitShip(cell);
-                        if (!shipIter.isAlive()) {
-                            battleHandler.blockAreaNearBy(hideBoard, shipIter);
-                            isWin=battleHandler.isWinCondition(gameData.getEnemy());
-                        }
-                        break;
-                    }
-                }
-                hideBoard.notifyDataSetChanged();
-                if(isWin)
-                    setFinalStage();;
+        hideViewBoard.setOnItemClickListener((parent, view, position, id) -> {
+            Cell cell = enemyBoard.getItem(position);
+            if(shotHandler(enemyBoard,gameData.getEnemy().getShips(),cell)== Cell.Status.MISSED) {
+                turn.setImageResource(R.drawable.enemy);
+                botResponseShot();
             }
+            turn.setImageResource(R.drawable.you);
+            hideBoard.getItem(cell.getY()*10 + cell.getX()).setStatus(cell.getStatus());
+            hideBoard.getItem(cell.getY()*10 + cell.getX()).setSprite(cell.getSprite());
+
+            for (BaseShip shipIter : gameData.getEnemy().getShips()) {
+                if (shipIter.getShipLoaction().contains(cell)) {
+                    battleHandler.hitShip(cell);
+                    if (!shipIter.isAlive()) {
+                        battleHandler.blockAreaNearBy(hideBoard, shipIter);
+                        isWin=battleHandler.isWinCondition(gameData.getEnemy());
+                    }
+                    break;
+                }
+            }
+            hideBoard.notifyDataSetChanged();
+            if(isWin)
+                setFinalStage();;
         });
     }
     private Cell getCellToShoot(Cell cel, Cell.Status status)
@@ -154,9 +149,10 @@ public class GameProcess extends AppCompatActivity {
                 if (ship.getShipLoaction().contains(cell)) {
                     battleHandler.hitShip(cell);
                     isHit = Cell.Status.HIT;
-                    if (!ship.isAlive())
+                    if (!ship.isAlive()) {
                         battleHandler.blockAreaNearBy(board, ship);
                         isHit = Cell.Status.KILED;
+                    }
                     break;
                 }
             }
