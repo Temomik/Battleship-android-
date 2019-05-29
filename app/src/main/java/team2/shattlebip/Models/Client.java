@@ -36,7 +36,7 @@ import team2.shattlebip.R;
 
 public class Client extends AsyncTask<Void, AdapterBoard, String> {
 
-    private String dstAddress = "192.168.56.1";
+    private String dstAddress = "159.89.99.20";
     private int dstPort = 5057;
     private String response = "";
     private String receive = "";
