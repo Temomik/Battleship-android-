@@ -118,7 +118,19 @@ public class BotAsync extends AsyncTask<Void, AdapterBoard, String> {
             if (isClick == true) {
                 if (shotHandler(enemyBoard, gameData.getEnemy().getShips(), cell) == Cell.Status.MISSED) {
                     onProgressUpdateNum=1;
-                    botResponseShot();
+                    Cell.Status status=null;
+                    Cell _cell=null;
+                    do {
+                        _cell=getCellToShoot(_cell,status);
+                        status=shotHandler(myBoard,gameData.getMe().getShips(),_cell);
+                        publishProgress();
+                        try
+                        {
+                            Thread.sleep(400);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }while(status== Cell.Status.HIT||status== Cell.Status.NONE);
                     publishProgress();
                     isLose = battleHandler.isWinCondition(gameData.getMe());
                     if (isLose)
@@ -165,21 +177,6 @@ public class BotAsync extends AsyncTask<Void, AdapterBoard, String> {
             return  isHit;
         }
         return Cell.Status.NONE;
-    }
-    private void botResponseShot()
-    {
-        Cell.Status status=null;
-        Cell cell=null;
-        do {
-            cell=getCellToShoot(cell,status);
-            status=shotHandler(myBoard,gameData.getMe().getShips(),cell);
-            try
-            {
-                Thread.sleep(400);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }while(status== Cell.Status.HIT||status== Cell.Status.NONE);
     }
     private Cell getCellToShoot(Cell cel, Cell.Status status)
     {
