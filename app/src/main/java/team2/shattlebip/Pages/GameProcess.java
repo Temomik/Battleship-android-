@@ -2,6 +2,8 @@ package team2.shattlebip.Pages;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.support.annotation.MainThread;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import java.util.Random;
 import java.util.Stack;
 
 import team2.shattlebip.GameHandlers.BattleStageHandler;
+import team2.shattlebip.Models.BotAsync;
 import team2.shattlebip.Models.Client;
 import team2.shattlebip.Models.GameData;
 import team2.shattlebip.R;
@@ -61,13 +64,14 @@ public class GameProcess extends AppCompatActivity {
         hideViewBoard.setColumnWidth(90);
         hideViewBoard.setAdapter(hideBoard);
         turn = findViewById(R.id.turnButton);
+//        turn.setImageResource(R.drawable.you);
         if(MainMenu.isOnline==0)
         makeShot();
         else if(MainMenu.isOnline==1)
         makeOnlineShot();
     }
 
-    private void makeShot()
+    /*private void makeShot()
     {
         hideViewBoard.setOnItemClickListener((parent, view, position, id) -> {
             isLose=false;
@@ -79,10 +83,11 @@ public class GameProcess extends AppCompatActivity {
                 if(isLose)
                     setFinalLoseStage();
             }
-            turn.setImageResource(R.drawable.you);
             hideBoard.getItem(cell.getY()*10 + cell.getX()).setStatus(cell.getStatus());
             hideBoard.getItem(cell.getY()*10 + cell.getX()).setSprite(cell.getSprite());
-
+            turn.setImageResource(R.drawable.you);
+            long tStart = System.currentTimeMillis();
+            long tDelta = 0;
             for (BaseShip shipIter : gameData.getEnemy().getShips()) {
                 if (shipIter.getShipLoaction().contains(cell)) {
                     battleHandler.hitShip(cell);
@@ -97,7 +102,7 @@ public class GameProcess extends AppCompatActivity {
             if(isWin)
                 setFinalStage();;
         });
-    }
+    }*/
 
 
     private void addNearCells(Cell cel) {
@@ -118,6 +123,12 @@ public class GameProcess extends AppCompatActivity {
         do {
             cell=getCellToShoot(cell,status);
             status=shotHandler(myBoard,gameData.getMe().getShips(),cell);
+//            try
+//            {
+//                Thread.sleep(400);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
         }while(status== Cell.Status.HIT||status== Cell.Status.NONE);
     }
     private Cell getCellToShoot(Cell cel, Cell.Status status)
@@ -185,7 +196,11 @@ public class GameProcess extends AppCompatActivity {
     private void setFinalLoseStage() {
         startActivity(new Intent("team2.shattlebip.Pages.FinalPageLose"));
     }
-
+    private void makeShot()
+    {
+        BotAsync bot= new BotAsync(hideViewBoard,hideBoard,turn,this);
+        bot.execute();
+    }
     private void makeOnlineShot()
     {
         Client client=new Client(hideViewBoard,hideBoard,turn,this);

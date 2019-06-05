@@ -138,7 +138,7 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
                             tosend = "Miss";
                             break;
                         case VACANT:
-                           tosend = "Vacant";
+                            tosend = "Vacant";
                         case KILED:
                             tosend = "Kill";
                             break;
