@@ -36,6 +36,7 @@ public class GameProcess extends AppCompatActivity {
     private Stack<Cell> cellStack=new Stack<>();
     private Stack<Cell> hitStack = new Stack<>();
     private boolean isWin;
+    private boolean isLose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +70,14 @@ public class GameProcess extends AppCompatActivity {
     private void makeShot()
     {
         hideViewBoard.setOnItemClickListener((parent, view, position, id) -> {
+            isLose=false;
             Cell cell = enemyBoard.getItem(position);
             if(shotHandler(enemyBoard,gameData.getEnemy().getShips(),cell)== Cell.Status.MISSED) {
                 turn.setImageResource(R.drawable.enemy);
                 botResponseShot();
+                isLose=battleHandler.isWinCondition(gameData.getMe());
+                if(isLose)
+                    setFinalLoseStage();
             }
             turn.setImageResource(R.drawable.you);
             hideBoard.getItem(cell.getY()*10 + cell.getX()).setStatus(cell.getStatus());
@@ -93,33 +98,7 @@ public class GameProcess extends AppCompatActivity {
                 setFinalStage();;
         });
     }
-    private Cell getCellToShoot(Cell cel, Cell.Status status)
-    {
-        Cell cell=null;
-        if((status==null&&hitStack.size()==0)||status== Cell.Status.VACANT) {
-            Random rand = new Random();
-            int position = rand.nextInt(100);
-            cell = myBoard.getItem(position);
-        }
-        else
-        {
-            if(status== Cell.Status.HIT) {
-                hitStack.add(cel);
-                addNearCells(cel);
-            }
-                cell = cellStack.pop();
-        }
-        for(BaseShip ship: gameData.getMe().getShips()) {
-            if (ship.getShipLoaction().contains(cel)&&!ship.isAlive()) {
-                cellStack.clear();
-                hitStack.clear();
-                Random rand = new Random();
-                int position = rand.nextInt(100);
-                cell = myBoard.getItem(position);
-            }
-        }
-        return cell;
-    }
+
 
     private void addNearCells(Cell cel) {
         if(cel.getX()+1<10)
@@ -139,9 +118,42 @@ public class GameProcess extends AppCompatActivity {
         do {
             cell=getCellToShoot(cell,status);
             status=shotHandler(myBoard,gameData.getMe().getShips(),cell);
-        }while(status== Cell.Status.HIT||status== Cell.Status.VACANT);
+        }while(status== Cell.Status.HIT||status== Cell.Status.NONE);
     }
-
+    private Cell getCellToShoot(Cell cel, Cell.Status status)
+    {
+        Cell cell;
+        if(((status==null&&hitStack.size()==0))||status== Cell.Status.NONE) {
+            Random rand = new Random();
+            int position = rand.nextInt(100);
+            cell = myBoard.getItem(position);
+        }
+        else
+        {
+            if(status==Cell.Status.HIT) {
+                hitStack.add(cel);
+                addNearCells(cel);
+            }
+            if(!cellStack.empty())
+            cell = cellStack.pop();
+            else
+            {
+                Random rand = new Random();
+                int position = rand.nextInt(100);
+                cell = myBoard.getItem(position);
+            }
+        }
+        for(BaseShip ship: gameData.getMe().getShips()) {
+            if (ship.getShipLoaction().contains(cel)&&!ship.isAlive()) {
+                cellStack.clear();
+                hitStack.clear();
+                Random rand = new Random();
+                int position = rand.nextInt(100);
+                cell = myBoard.getItem(position);
+            }
+        }
+        return cell;
+    }
     private Cell.Status shotHandler(AdapterBoard board, Deque<BaseShip> ships, Cell cell) {
         Cell.Status isHit = Cell.Status.MISSED;
         if (cell.isReadyToInteraction()) {
@@ -163,12 +175,15 @@ public class GameProcess extends AppCompatActivity {
             board.notifyDataSetChanged();
             return  isHit;
         }
-        return Cell.Status.VACANT;
+        return Cell.Status.NONE;
     }
 
 
     private void setFinalStage() {
         startActivity(new Intent("team2.shattlebip.Pages.FinalPage"));
+    }
+    private void setFinalLoseStage() {
+        startActivity(new Intent("team2.shattlebip.Pages.FinalPageLose"));
     }
 
     private void makeOnlineShot()

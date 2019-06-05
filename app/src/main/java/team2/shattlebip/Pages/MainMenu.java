@@ -31,7 +31,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener 
     }
 
     private void playOnlineButtonClick() {
-        startActivity(new Intent("team2.shattlebip.Pages.ConnectMenu"));
+        startActivity(new Intent("team2.shattlebip.Pages.MainActivity"));
     }
     private void playWithBotButtonClick() {
         startActivity(new Intent("team2.shattlebip.Pages.MainActivity"));

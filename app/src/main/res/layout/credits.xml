@@ -14,10 +14,9 @@
         android:id="@+id/boards"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_centerVertical="false"
-        android:background="@drawable/developers"
         android:layout_marginTop="100dp"
+        android:background="@drawable/developers"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -33,7 +32,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text=" Tixon "
+            android:text=" Tsikhanovich Uladzislau
+        Rapinchuk Artem"
             android:textColor="#FFFFFF"
             android:textSize="35dp" />
 
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text=" Rapira "
+            android:text="CPP LabWork"
             android:textColor="#FFFFFF"
             android:textSize="35dp" />
 

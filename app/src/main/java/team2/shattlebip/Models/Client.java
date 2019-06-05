@@ -79,20 +79,12 @@ public class Client extends AsyncTask<Void, AdapterBoard, String> {
                 break;
         }
 
-//        if(receive.equals("Hit") || receive.equals("Youbegin") || receive.equals("Kill"))
-//            turn.setImageResource(R.drawable.you);
-//        else if(receive.equals("Miss") || receive.equals("You will be second"))
-//            turn.setImageResource(R.drawable.enemy);
-//        if (tosend.equals("Hit") || tosend.equals("Kill"))
-//            turn.setImageResource(R.drawable.enemy);
-//        else if(tosend.equals("Miss"))
-//            turn.setImageResource(R.drawable.you);
     }
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        if(result.equals("Win")||result.equals("Error")) {
-            Intent winintent = new Intent(context, ConnectionError.class);
+        if(result.equals("Win")) {
+            Intent winintent = new Intent(context, FinalPage.class);
             winintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(winintent);
         }

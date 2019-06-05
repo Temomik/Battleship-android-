@@ -11,11 +11,14 @@ import team2.shattlebip.R;
 public class FinalPage extends AppCompatActivity implements View.OnClickListener {
 
     private Button exitButton;
+    private Button creditsButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.final_page_win);
         exitButton = (Button) findViewById(R.id.exitButton);
+        creditsButton=findViewById(R.id.showCreditsButton);
+        creditsButton.setOnClickListener(this);
         exitButton.setOnClickListener(this);
     }
 
