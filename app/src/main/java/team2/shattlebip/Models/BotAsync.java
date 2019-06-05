@@ -50,6 +50,7 @@ public class BotAsync extends AsyncTask<Void, AdapterBoard, String> {
     private Stack<Cell> hitStack = new Stack<>();
     private AdapterBoard myBoard;
     private AdapterBoard enemyBoard;
+    private Cell.Status attackedCellStatus;
     private boolean isWin;
     private boolean isClick;
     private boolean isLose;
@@ -116,8 +117,13 @@ public class BotAsync extends AsyncTask<Void, AdapterBoard, String> {
         isClick=false;
         while (true) {
             if (isClick == true) {
-                if (shotHandler(enemyBoard, gameData.getEnemy().getShips(), cell) == Cell.Status.MISSED) {
+                attackedCellStatus=shotHandler(enemyBoard, gameData.getEnemy().getShips(), cell);
+                hideBoard.getItem(cell.getY() * 10 + cell.getX()).setStatus(cell.getStatus());
+                hideBoard.getItem(cell.getY() * 10 + cell.getX()).setSprite(cell.getSprite());
+                publishProgress();
+                if (attackedCellStatus == Cell.Status.MISSED) {
                     onProgressUpdateNum=1;
+                    publishProgress();
                     Cell.Status status=null;
                     Cell _cell=null;
                     do {
@@ -136,8 +142,7 @@ public class BotAsync extends AsyncTask<Void, AdapterBoard, String> {
                     if (isLose)
                         return "Lose";
                 }
-                hideBoard.getItem(cell.getY() * 10 + cell.getX()).setStatus(cell.getStatus());
-                hideBoard.getItem(cell.getY() * 10 + cell.getX()).setSprite(cell.getSprite());
+
                 onProgressUpdateNum=2;
                 for (BaseShip shipIter : gameData.getEnemy().getShips()) {
                     if (shipIter.getShipLoaction().contains(cell)) {
